@@ -16,9 +16,6 @@
     --gold-dim:#8A6E3D;
     --text-l:#23252E;
     --box-l:#EDE8DA;
-    --rust:#B0512E;
-    --rust-dim:#8C4327;
-    --amber:#C98A2B;
     --font-human: Arial, Helvetica, "Liberation Sans", sans-serif;
     --font-system: "Courier New", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
@@ -102,58 +99,58 @@
   }
 
   /* content blocks */
-  .content{ position:relative; height:100%; display:flex; flex-direction:column; justify-content:flex-start; padding-top:108px; max-width:1180px; }
+  .content{ position:relative; height:100%; display:flex; flex-direction:column; justify-content:center; padding-top:0; max-width:1180px; }
   .content.narrow{ max-width:1080px; }
 
-  h1.big-title{ font-size:72px; line-height:1.08; font-weight:700; margin:0 0 22px; color:var(--paper); max-width:1080px; }
-  h1.quote-title{ font-size:52px; line-height:1.18; font-weight:700; margin:0; color:var(--paper); max-width:1080px; }
-  h1.quote-title.smaller{ font-size:44px; }
-  h1.content-title{ font-size:54px; line-height:1.15; font-weight:700; margin:0 0 18px; color:var(--text-l); max-width:1080px; }
+  h1.big-title{ font-size:84px; line-height:1.08; font-weight:700; margin:0 0 26px; color:var(--paper); max-width:1150px; }
+  h1.quote-title{ font-size:62px; line-height:1.22; font-weight:700; margin:0; color:var(--paper); max-width:1150px; }
+  h1.quote-title.smaller{ font-size:52px; }
+  h1.content-title{ font-size:66px; line-height:1.18; font-weight:700; margin:0 0 24px; color:var(--text-l); max-width:1150px; }
 
-  .subtitle-italic{ font-family:var(--font-human); font-style:italic; font-size:27px; margin:8px 0 0; }
+  .subtitle-italic{ font-family:var(--font-human); font-style:italic; font-size:34px; margin:16px 0 0; }
   .slide.dark .subtitle-italic{ color:var(--gold); }
   .slide.light .subtitle-italic{ color:var(--goldl); }
 
-  .muted-line{ font-size:22px; margin-top:18px; }
+  .muted-line{ font-size:27px; margin-top:26px; }
   .slide.dark .muted-line{ color:var(--muted-d); }
   .slide.light .muted-line{ color:var(--muted-l); }
 
-  .body-text{ font-size:27px; line-height:1.5; max-width:1020px; }
+  .body-text{ font-size:36px; line-height:1.46; max-width:1080px; }
   .slide.light .body-text{ color:var(--text-l); }
   .slide.dark .body-text{ color:var(--paper); }
 
-  .highlight-line{ font-size:30px; font-weight:700; font-style:italic; margin-top:26px; }
+  .highlight-line{ font-size:37px; font-weight:700; font-style:italic; margin-top:32px; }
   .slide.light .highlight-line{ color:var(--goldl); }
 
   /* stat grid */
-  .stat-grid{ display:flex; gap:40px; margin-top:34px; }
-  .stat{ width:320px; }
-  .stat-value{ font-size:92px; font-weight:700; color:var(--goldl); line-height:1; }
-  .stat-label{ font-size:20px; margin-top:14px; line-height:1.32; }
+  .stat-grid{ display:flex; gap:48px; margin-top:44px; }
+  .stat{ width:340px; }
+  .stat-value{ font-size:118px; font-weight:700; color:var(--goldl); line-height:1; }
+  .stat-label{ font-size:24px; margin-top:18px; line-height:1.34; }
   .slide.light .stat-label{ color:var(--muted-l); }
 
   /* two-col */
-  .two-col{ display:flex; gap:70px; margin-top:38px; }
-  .col{ flex:1; max-width:480px; }
-  .col-kicker{ font-family:var(--font-system); font-weight:700; font-size:19px; letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; }
+  .two-col{ display:flex; gap:88px; margin-top:54px; }
+  .col{ flex:1; max-width:520px; }
+  .col-kicker{ font-family:var(--font-system); font-weight:700; font-size:21px; letter-spacing:2px; text-transform:uppercase; margin-bottom:22px; }
   .slide.dark .col-kicker{ color:var(--gold); }
   .slide.light .col-kicker{ color:var(--goldl); }
-  .col-body{ font-size:26px; line-height:1.5; }
+  .col-body{ font-size:34px; line-height:1.46; }
   .slide.dark .col-body{ color:var(--paper); }
   .slide.light .col-body{ color:var(--text-l); }
 
   /* bullet list */
-  ul.blist{ list-style:none; margin:32px 0 0; padding:0; max-width:1040px; }
-  ul.blist li{ position:relative; padding-left:34px; font-size:26px; line-height:1.5; margin-bottom:24px; }
-  ul.blist li::before{ content:""; position:absolute; left:0; top:10px; width:10px; height:10px; background:var(--goldl); }
+  ul.blist{ list-style:none; margin:42px 0 0; padding:0; max-width:1090px; }
+  ul.blist li{ position:relative; padding-left:38px; font-size:33px; line-height:1.44; margin-bottom:28px; }
+  ul.blist li::before{ content:""; position:absolute; left:0; top:12px; width:12px; height:12px; background:var(--goldl); }
   .slide.dark ul.blist li::before{ background:var(--gold); }
 
   /* timeline */
   .timeline{ display:flex; gap:38px; margin-top:36px; }
   .tl-step{ width:300px; }
-  .tl-num{ font-family:var(--font-system); font-weight:700; font-size:20px; color:var(--goldl); margin-bottom:12px; }
-  .tl-label{ font-weight:700; font-size:23px; color:var(--text-l); margin-bottom:12px; }
-  .tl-desc{ font-size:19px; color:var(--muted-l); line-height:1.38; }
+  .tl-num{ font-family:var(--font-system); font-weight:700; font-size:21px; color:var(--goldl); margin-bottom:12px; }
+  .tl-label{ font-weight:700; font-size:25px; color:var(--text-l); margin-bottom:12px; }
+  .tl-desc{ font-size:20px; color:var(--muted-l); line-height:1.4; }
 
   /* escalera de progresión (asistente -> agente) */
   .stairs{ display:flex; align-items:flex-end; gap:30px; margin-top:42px; }
@@ -169,8 +166,8 @@
   .stair-step.s4{ --riser:132px; }
 
   /* gauges (autodiagnóstico) */
-  .gauge-row{ display:flex; gap:40px; margin-top:36px; }
-  .gauge{ width:300px; }
+  .gauge-row{ display:flex; gap:44px; margin-top:44px; }
+  .gauge{ width:330px; }
   .gauge-svg{ display:block; width:100%; height:auto; overflow:visible; }
   .gauge-track{ fill:none; stroke:var(--box-l); stroke-width:17; stroke-linecap:round; }
   .gauge-arc{
@@ -178,22 +175,19 @@
     stroke-dasharray:251; stroke-dashoffset:251;
     transition:stroke-dashoffset 1s cubic-bezier(.22,.61,.36,1);
   }
-  .gauge-arc.c-good{ stroke:var(--gold); }
-  .gauge-arc.c-amber{ stroke:var(--amber); }
-  .gauge-arc.c-bad{ stroke:var(--rust); }
-  .gauge-arc.c-worse{ stroke:var(--rust-dim); }
+  .gauge-arc.t1{ stroke:#D9A441; }
+  .gauge-arc.t2{ stroke:#3E7C86; }
+  .gauge-arc.t3{ stroke:#B0512E; }
+  .gauge-arc.t4{ stroke:#5B3B63; }
   .gauge-wrap{ position:relative; }
-  .gauge-value{
-    position:absolute; left:0; right:0; top:56%; transform:translateY(-50%);
-    text-align:center; font-size:50px; font-weight:700; color:var(--text-l);
-  }
-  .gauge .stat-label{ margin-top:8px; text-align:center; font-size:19px; }
+  .gauge-value{ font-family:var(--font-human); font-weight:700; fill:var(--text-l); font-size:40px; }
+  .gauge .stat-label{ margin-top:12px; text-align:center; font-size:23px; }
 
   /* fila con caja/candado (lock-in) */
-  .lockrow{ display:flex; gap:56px; align-items:center; margin-top:14px; }
+  .lockrow{ display:flex; gap:60px; align-items:center; margin-top:20px; }
   .lockrow .blist{ flex:1; margin-top:0; }
-  .lockrow .blist li{ margin-bottom:15px; font-size:24px; }
-  .lockbox{ width:230px; flex-shrink:0; }
+  .lockrow .blist li{ margin-bottom:18px; font-size:27px; }
+  .lockbox{ width:260px; flex-shrink:0; }
   .lockbox svg{ width:100%; height:auto; overflow:visible; }
 
   /* cinta transportadora (ritmo antes/ahora) */
@@ -229,7 +223,7 @@
   /* side box (slide 17) */
   .with-side{ display:flex; gap:46px; margin-top:28px; align-items:flex-start; }
   .with-side .blist-wrap{ flex:1; }
-  .side-box{ width:370px; background:var(--box-l); padding:26px 28px; font-size:19px; line-height:1.42; color:var(--text-l); flex-shrink:0; }
+  .side-box{ width:420px; background:var(--box-l); padding:30px 32px; font-size:24px; line-height:1.42; color:var(--text-l); flex-shrink:0; }
 
   /* footer (portada / gracias) */
   .foot-name{ position:absolute; left:72px; bottom:104px; font-size:22px; font-weight:700; color:var(--paper); }
@@ -249,21 +243,21 @@
 
   /* infografía de stats con ícono (EncuestaIA) */
   .infostat-grid{ display:flex; flex-wrap:wrap; gap:0; margin-top:34px; max-width:1120px; border-top:1px solid rgba(35,37,46,.14); border-left:1px solid rgba(35,37,46,.14); }
-  .infostat{ width:50%; padding:26px 34px 26px 0; margin-left:-1px; margin-top:-1px; border-right:1px solid rgba(35,37,46,.14); border-bottom:1px solid rgba(35,37,46,.14); display:flex; gap:18px; align-items:flex-start; }
-  .infostat-icon{ width:44px; height:44px; flex-shrink:0; margin-top:4px; }
+  .infostat{ width:50%; padding:28px 36px 28px 0; margin-left:-1px; margin-top:-1px; border-right:1px solid rgba(35,37,46,.14); border-bottom:1px solid rgba(35,37,46,.14); display:flex; gap:20px; align-items:flex-start; }
+  .infostat-icon{ width:52px; height:52px; flex-shrink:0; margin-top:4px; }
   .infostat-icon svg{ width:100%; height:100%; }
-  .infostat-value{ font-size:56px; font-weight:700; color:var(--goldl); line-height:1; }
-  .infostat-label{ font-size:18px; margin-top:8px; line-height:1.32; color:var(--muted-l); max-width:340px; }
+  .infostat-value{ font-size:76px; font-weight:700; color:var(--goldl); line-height:1; }
+  .infostat-label{ font-size:23px; margin-top:10px; line-height:1.32; color:var(--muted-l); max-width:380px; }
 
   /* --------- demo de lectura en vivo --------- */
-  .demo-wrap{ display:flex; gap:50px; margin-top:26px; align-items:flex-start; }
+  .demo-wrap{ display:flex; gap:40px; margin-top:18px; align-items:flex-start; }
   .demo-doc{
-    background:#fff; width:680px; padding:38px 44px; font-family: Georgia, "Times New Roman", serif;
-    font-size:19px; line-height:1.62; color:#26241f; box-shadow:0 20px 46px rgba(20,17,10,.10);
+    background:#fff; width:600px; padding:28px 32px; font-family: Georgia, "Times New Roman", serif;
+    font-size:18px; line-height:1.52; color:#26241f; box-shadow:0 20px 46px rgba(20,17,10,.10);
     position:relative; flex-shrink:0;
   }
   .demo-doc .art{ font-weight:700; font-family:var(--font-human); font-size:13px; letter-spacing:1px; color:#8a8470; margin:0 0 6px; text-transform:uppercase; }
-  .demo-doc p{ margin:0 0 22px; }
+  .demo-doc p{ margin:0 0 16px; }
   .demo-doc p:last-child{ margin-bottom:0; }
   .demo-doc .fine{ position:absolute; left:40px; bottom:14px; font-family:var(--font-human); font-size:12px; color:#b7b0a0; }
   .flag{
@@ -273,13 +267,13 @@
   }
   .flag.hit{ background-size:100% 100%; }
 
-  .annot-rail{ width:300px; padding-top:4px; }
-  .annot-item{ opacity:0; transform:translateX(14px); transition:opacity .45s ease, transform .45s ease; margin-bottom:26px; padding-left:18px; border-left:2px solid var(--gold); }
+  .annot-rail{ width:340px; padding-top:2px; }
+  .annot-item{ opacity:0; transform:translateX(14px); transition:opacity .45s ease, transform .45s ease; margin-bottom:16px; padding-left:18px; border-left:3px solid var(--gold); }
   .annot-item.show{ opacity:1; transform:translateX(0); }
-  .annot-item .a-num{ font-family:var(--font-system); font-size:12px; color:var(--goldl); font-weight:700; margin-bottom:4px; letter-spacing:1px; }
-  .annot-item .a-text{ font-family:var(--font-system); font-size:14.5px; line-height:1.42; color:var(--text-l); }
+  .annot-item .a-num{ font-family:var(--font-system); font-size:13px; color:var(--goldl); font-weight:700; margin-bottom:4px; letter-spacing:1px; }
+  .annot-item .a-text{ font-family:var(--font-human); font-size:18px; line-height:1.3; color:var(--text-l); font-weight:600; }
 
-  .demo-summary{ margin-top:4px; font-size:19px; font-weight:700; font-style:italic; color:var(--goldl); opacity:0; transition:opacity .6s ease; }
+  .demo-summary{ margin-top:14px; font-size:22px; font-weight:700; font-style:italic; color:var(--goldl); opacity:0; transition:opacity .6s ease; }
   .demo-summary.show{ opacity:1; }
 
   /* --------- typewriter --------- */
@@ -463,15 +457,24 @@
     </section>
 
     <!-- ================= SLIDE 6 — Yale/Stanford ================= -->
-    <section class="slide light" data-notes="No es una sospecha propia: investigadores de Yale y Stanford midieron cómo responden estos sistemas frente a consultas jurídicas verificables y encontraron tasas de error importantes, agravadas porque los modelos casi no reconocen cuándo se equivocan. Aclarar el límite honesto: ese estudio midió jurisprudencia norteamericana, no pliegos argentinos.">
+    <section class="slide light" data-notes="Estudio 'Large Legal Fictions' de Stanford (Dan Ho et al.), sobre más de 800.000 consultas jurídicas verificables. Honestidad antes de que la marquen ustedes: esto midió jurisprudencia norteamericana, no pliegos argentinos. No sabemos la tasa exacta sobre un pliego nuestro, pero alcanza para ser prudentes.">
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="kicker reveal r1">Bloque 2 · Evidencia</div>
       <div class="content">
-        <h1 class="content-title reveal r2">Tasas de error altas. Y casi no reconocen cuándo se equivocan.</h1>
-        <div class="attribution reveal r2">Investigadores de Yale y Stanford, sobre consultas jurídicas verificables.</div>
-        <div class="box reveal r3">
-          <p>Honestidad antes de que la marquen ustedes: ese estudio midió jurisprudencia norteamericana, no pliegos argentinos. No sabemos cuál es la tasa de error exacta sobre un pliego nuestro. Pero alcanza para ser prudentes.</p>
+        <h1 class="content-title reveal r2">Ni las herramientas hechas a medida para el derecho están exentas.</h1>
+        <div class="two-col" style="margin-top:8px;">
+          <div class="col reveal r3">
+            <div class="col-kicker">Modelos de propósito general</div>
+            <div class="stat-value" style="font-size:72px;">58–88%</div>
+            <div class="col-body">GPT-4, GPT-3.5 y Llama 2, sobre consultas jurídicas verificables.</div>
+          </div>
+          <div class="col reveal r4">
+            <div class="col-kicker">Herramientas jurídicas especializadas</div>
+            <div class="stat-value" style="font-size:72px;">17–33%</div>
+            <div class="col-body">Westlaw AI-Assisted Research y Lexis+ AI: entrenadas para esto, y aun así fallan.</div>
+          </div>
         </div>
+        <div class="attribution reveal r5" style="margin-top:24px;">Stanford, "Large Legal Fictions" — más de 800.000 consultas jurídicas verificables.</div>
       </div>
       <div class="pagenum">06 / 22</div>
     </section>
@@ -480,8 +483,8 @@
     <section class="slide light" data-notes="Este fragmento es ilustrativo, redactado para esta charla a partir de los patrones que encontramos en el autodiagnóstico, no es un pliego real. La idea es mostrar, no solo contar: una persona lee estas tres frases y las entiende dentro de la tradición administrativa. Una IA no tiene ese contexto y no avisa que le falta. Esto es exactamente lo que el autodiagnóstico mide como 'ambigüedad' en el 78% de los casos.">
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="kicker reveal r1">Bloque 2 · Así lee una IA</div>
-      <div class="content">
-        <h1 class="content-title reveal r2">Un fragmento. Miremos cómo lo lee una IA.</h1>
+      <div class="content" style="justify-content:flex-start; padding-top:64px;">
+        <h1 class="content-title reveal r2" style="font-size:42px; margin-bottom:10px;">Un fragmento. Miremos cómo lo lee una IA.</h1>
         <div class="demo-wrap">
           <div class="demo-doc reveal r3">
             <div class="art">Artículo 14 · Criterios de evaluación de ofertas</div>
@@ -510,29 +513,41 @@
         <div class="gauge-row">
           <div class="gauge reveal r3">
             <div class="gauge-wrap">
-              <svg viewBox="0 0 200 106" class="gauge-svg"><path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/><path class="gauge-arc" data-target="100" d="M20,100 A80,80 0 0 1 180,100"/></svg>
-              <div class="gauge-value" data-target="100" data-suffix="%">0%</div>
+              <svg viewBox="0 0 200 106" class="gauge-svg">
+                <path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/>
+                <path class="gauge-arc" data-target="100" d="M20,100 A80,80 0 0 1 180,100"/>
+                <text class="gauge-value" data-target="100" data-suffix="%" x="100" y="66" text-anchor="middle">0%</text>
+              </svg>
             </div>
             <div class="stat-label">Objeto de la contratación: claro</div>
           </div>
           <div class="gauge reveal r3">
             <div class="gauge-wrap">
-              <svg viewBox="0 0 200 106" class="gauge-svg"><path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/><path class="gauge-arc" data-target="78" d="M20,100 A80,80 0 0 1 180,100"/></svg>
-              <div class="gauge-value" data-target="78" data-suffix="%">0%</div>
+              <svg viewBox="0 0 200 106" class="gauge-svg">
+                <path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/>
+                <path class="gauge-arc" data-target="78" d="M20,100 A80,80 0 0 1 180,100"/>
+                <text class="gauge-value" data-target="78" data-suffix="%" x="100" y="66" text-anchor="middle">0%</text>
+              </svg>
             </div>
             <div class="stat-label">de los pliegos, con ambigüedad</div>
           </div>
           <div class="gauge reveal r4">
             <div class="gauge-wrap">
-              <svg viewBox="0 0 200 106" class="gauge-svg"><path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/><path class="gauge-arc" data-target="66" d="M20,100 A80,80 0 0 1 180,100"/></svg>
-              <div class="gauge-value" data-target="66" data-suffix="%">0%</div>
+              <svg viewBox="0 0 200 106" class="gauge-svg">
+                <path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/>
+                <path class="gauge-arc" data-target="66" d="M20,100 A80,80 0 0 1 180,100"/>
+                <text class="gauge-value" data-target="66" data-suffix="%" x="100" y="66" text-anchor="middle">0%</text>
+              </svg>
             </div>
             <div class="stat-label">falla en cómo se pondera la oferta</div>
           </div>
           <div class="gauge reveal r4">
             <div class="gauge-wrap">
-              <svg viewBox="0 0 200 106" class="gauge-svg"><path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/><path class="gauge-arc" data-target="62" d="M20,100 A80,80 0 0 1 180,100"/></svg>
-              <div class="gauge-value" data-target="62" data-suffix="%">0%</div>
+              <svg viewBox="0 0 200 106" class="gauge-svg">
+                <path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/>
+                <path class="gauge-arc" data-target="62" d="M20,100 A80,80 0 0 1 180,100"/>
+                <text class="gauge-value" data-target="62" data-suffix="%" x="100" y="66" text-anchor="middle">0%</text>
+              </svg>
             </div>
             <div class="stat-label">cumplimiento promedio general</div>
           </div>
@@ -545,10 +560,10 @@
     <section class="slide light" data-notes="La tecnología viene en una progresión conocida. En la última etapa uno deja de pedir una tarea puntual: le da un objetivo y la máquina arma sola la secuencia. No es ciencia ficción lejana: el Banco Mundial ya tiene SOURCe, y en Europa los datos de licitaciones se consultan por API gracias a una ontología pensada para que los lea una máquina. Aclarar con honestidad: en Argentina hoy no hay evidencia de que esto esté pasando de forma significativa del lado de los proveedores. Lo que cambia es la interfaz: un agente de compras del proveedor choca contra una plataforma pensada solo para un empleado administrativo.">
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="kicker reveal r1">Bloque 2 · Hacia dónde va esto</div>
-      <div class="content">
-        <h1 class="content-title reveal r2" style="max-width:1150px;">La tecnología avanza de la legibilidad humana a la autonomía algorítmica</h1>
-        <div class="col-kicker reveal r3" style="margin-top:6px;">Asistente → Generativa → Copiloto → Agente</div>
-        <div class="stairs" style="margin-top:32px;">
+      <div class="content" style="justify-content:flex-start; padding-top:64px;">
+        <h1 class="content-title reveal r2" style="font-size:40px; max-width:1150px; margin-bottom:10px;">La tecnología avanza de la legibilidad humana a la autonomía algorítmica</h1>
+        <div class="col-kicker reveal r3" style="margin-top:2px;">Asistente → Generativa → Copiloto → Agente</div>
+        <div class="stairs" style="margin-top:28px;">
           <div class="stair-step s1 reveal r3">
             <div class="stair-text"><div class="tl-num">01</div><div class="tl-label">Asistente</div><div class="tl-desc">Responde lo que se le pregunta</div></div>
             <div class="stair-bar"></div>
@@ -566,7 +581,7 @@
             <div class="stair-bar"></div>
           </div>
         </div>
-        <div class="muted-line reveal r5" style="font-style:italic; margin-top:16px; font-size:19px; max-width:1040px;">Ya existen: SOURCe (Banco Mundial) y la Ontología de Contratación Electrónica (UE). En Argentina, hoy, sin evidencia significativa de proveedores-agente en licitaciones. Pero la tecnología va en esa dirección.</div>
+        <div class="muted-line reveal r5" style="font-style:italic; margin-top:14px; font-size:18px; max-width:1040px;">Ya existen: SOURCe (Banco Mundial) y la Ontología de Contratación Electrónica (UE). En Argentina, hoy, sin evidencia significativa de proveedores-agente en licitaciones. Pero la tecnología va en esa dirección.</div>
       </div>
       <div class="pagenum">08 / 21</div>
     </section>
@@ -586,17 +601,17 @@
     <section class="slide light" data-notes="Cuando llegó la firma digital o la gestión documental electrónica, el ritmo lo marcaba el desarrollo público. Con la IA generativa eso ya no pasa: cualquier proveedor o empleado tiene acceso hoy por el precio de una suscripción mensual. Para cuando una herramienta propia esté lista, el estándar ya se movió varias veces.">
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="kicker reveal r1">Bloque 3</div>
-      <div class="content">
-        <h1 class="content-title reveal r2">Antes, el ritmo lo marcaba el desarrollo público. Ya no.</h1>
-        <div class="two-col">
+      <div class="content" style="justify-content:flex-start; padding-top:74px;">
+        <h1 class="content-title reveal r2" style="font-size:48px; margin-bottom:16px;">Antes, el ritmo lo marcaba el desarrollo público. Ya no.</h1>
+        <div class="two-col" style="margin-top:36px;">
           <div class="col reveal r3">
             <div class="col-kicker">Antes</div>
-            <div class="col-body">Firma digital, gestión documental: se licitaba un sistema y se esperaban los tiempos de implementación. Mientras tanto, el resto del mundo esperaba casi al mismo ritmo.</div>
+            <div class="col-body" style="font-size:26px;">Firma digital, gestión documental: se licitaba un sistema y se esperaban los tiempos de implementación. Mientras tanto, el resto del mundo esperaba casi al mismo ritmo.</div>
             <div class="belt"></div>
           </div>
           <div class="col reveal r4">
             <div class="col-kicker">Ahora · IA generativa</div>
-            <div class="col-body">Una suscripción mensual. Sin pliego. Sin presupuesto plurianual. Sin esperar un desarrollo a medida.</div>
+            <div class="col-body" style="font-size:26px;">Una suscripción mensual. Sin pliego. Sin presupuesto plurianual. Sin esperar un desarrollo a medida.</div>
             <div class="belt fast"></div>
           </div>
         </div>
@@ -620,13 +635,13 @@
     <section class="slide light" data-notes="No es mala fe de nadie, es física contractual: el componente que de verdad interpreta y decide casi nunca queda tan abierto como el resto. Y hay una segunda capa más silenciosa: muchos contratos venden, junto con el software, el equipo que lo opera y lo entrena. Ahí no se terceriza una herramienta, se terceriza el criterio.">
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="kicker reveal r1">Bloque 3 · Antes de comprar la solución</div>
-      <div class="content">
-        <h1 class="content-title reveal r2">El riesgo no es el producto. Es el día que lo querés dejar.</h1>
-        <div class="lockrow">
-          <ul class="blist">
-            <li class="reveal r3"><b>Capa superficial (abierta):</b> interoperabilidad aparente, conecta con cualquier plataforma</li>
-            <li class="reveal r4"><b>Capa profunda (la caja negra):</b> el motor que interpreta y decide casi nunca queda tan abierto como el resto</li>
-            <li class="reveal r5">Se terceriza el criterio: no solo la herramienta, también el equipo que la entrena y la opera. ¿Hay una cláusula de salida ordenada?</li>
+      <div class="content" style="justify-content:flex-start; padding-top:70px;">
+        <h1 class="content-title reveal r2" style="font-size:44px; margin-bottom:16px;">El riesgo no es el producto. Es el día que lo querés dejar.</h1>
+        <div class="lockrow" style="margin-top:10px;">
+          <ul class="blist" style="margin-top:0;">
+            <li class="reveal r3" style="font-size:25px; margin-bottom:18px;"><b>Capa superficial (abierta):</b> interoperabilidad aparente, conecta con cualquier plataforma</li>
+            <li class="reveal r4" style="font-size:25px; margin-bottom:18px;"><b>Capa profunda (la caja negra):</b> el motor que interpreta y decide casi nunca queda tan abierto como el resto</li>
+            <li class="reveal r5" style="font-size:25px; margin-bottom:18px;">Se terceriza el criterio: no solo la herramienta, también el equipo que la entrena y la opera. ¿Hay una cláusula de salida ordenada?</li>
           </ul>
           <div class="lockbox reveal r5">
             <svg viewBox="0 0 200 200">
@@ -676,8 +691,8 @@
     <section class="slide light" data-notes="Relevamiento entre agentes de la administración pública provincial: 86% ya usa IA, con un 44% de forma frecuente. El dato que más importa: 98% quiere capacitarse, la gente ya lo está pidiendo. El obstáculo principal no es la resistencia, es no saber usarla bien. Y casi uno de cada cinco tiene dudas legítimas de confidencialidad, que hay que responder con protocolos claros, no con un 'quédense tranquilos'.">
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="kicker reveal r1">EncuestaIA-2026 · Santa Fe · +3.000 respuestas</div>
-      <div class="content">
-        <h1 class="content-title reveal r2">Esto ya pasó. No es una discusión sobre si va a pasar.</h1>
+      <div class="content" style="justify-content:flex-start; padding-top:78px;">
+        <h1 class="content-title reveal r2" style="font-size:48px; margin-bottom:18px;">Esto ya pasó. No es una discusión sobre si va a pasar.</h1>
         <div class="infostat-grid">
           <div class="infostat reveal r3">
             <div class="infostat-icon"><svg viewBox="0 0 44 44" fill="none" stroke="var(--goldl)" stroke-width="2.5"><circle cx="22" cy="22" r="18"/><path d="M13 22.5 L19 28.5 L31 15" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -715,20 +730,20 @@
     <section class="slide light" data-notes="A fines del año pasado aprobamos, por Decreto 287/2026, un Pliego Único rediseñado con la metodología de contratación visual. No es estética por la estética: un pliego con lógica defensiva produce documentos que solo entienden los abogados. Lo validamos este año en charlas con proveedores, con muy buena recepción.">
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="kicker reveal r1">Decreto N.º 287/2026</div>
-      <div class="content">
-        <h1 class="content-title reveal r2">Pliego Único: contratación visual</h1>
-        <div class="with-side">
+      <div class="content" style="justify-content:flex-start; padding-top:70px;">
+        <h1 class="content-title reveal r2" style="font-size:46px; margin-bottom:14px;">Pliego Único: contratación visual</h1>
+        <div class="with-side" style="margin-top:14px;">
           <div class="blist-wrap">
-            <ul class="blist" style="margin-top:14px;">
-              <li class="reveal r3">Tipografía pensada para pantalla</li>
-              <li class="reveal r3">Un color distinto por capítulo</li>
-              <li class="reveal r4">Navegación rápida entre secciones</li>
-              <li class="reveal r4">Glosario que de verdad se puede usar</li>
+            <ul class="blist" style="margin-top:0;">
+              <li class="reveal r3" style="font-size:26px; margin-bottom:16px;">Tipografía pensada para pantalla</li>
+              <li class="reveal r3" style="font-size:26px; margin-bottom:16px;">Un color distinto por capítulo</li>
+              <li class="reveal r4" style="font-size:26px; margin-bottom:16px;">Navegación rápida entre secciones</li>
+              <li class="reveal r4" style="font-size:26px; margin-bottom:16px;">Glosario que de verdad se puede usar</li>
             </ul>
           </div>
           <div class="side-box reveal r4">Un pliego defensivo (redactado para resistir una impugnación) solo lo entienden los abogados. Y ahí las pymes no se presentan: no porque no puedan cumplir el contrato, sino porque les cuesta más entenderlo que ejecutarlo.</div>
         </div>
-        <div class="highlight-line reveal r5" style="font-size:21px;">Validado este año en charlas con proveedores. La recepción fue muy buena: no hace falta convencer a nadie de que un documento más claro es mejor.</div>
+        <div class="highlight-line reveal r5" style="font-size:22px; margin-top:18px;">Validado este año en charlas con proveedores. La recepción fue muy buena: no hace falta convencer a nadie de que un documento más claro es mejor.</div>
       </div>
       <div class="pagenum">17 / 21</div>
     </section>
@@ -737,17 +752,17 @@
     <section class="slide light" data-notes="Timbó Compras hoy no tiene IA incorporada, y decirlo así juega a favor: el punto es que tener el proceso estructurado es la condición previa para incorporarla rápido. El curso de Puente al Futuro (confirmar si ya lanzó a la fecha de la charla) da la estructura para usar estas herramientas con responsabilidad. Ninguna de las tres piezas (pliego, sistema, capacitación) resuelve el problema sola: van juntas.">
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="kicker reveal r1">Bloque 5</div>
-      <div class="content">
-        <h1 class="content-title reveal r2">El sistema, y la capacitación</h1>
+      <div class="content" style="justify-content:flex-start; padding-top:76px;">
+        <h1 class="content-title reveal r2" style="font-size:48px; margin-bottom:14px;">El sistema, y la capacitación</h1>
         <div class="two-col bridge-row">
           <div class="col reveal r3">
             <div class="col-kicker">Timbó Compras</div>
-            <div class="col-body">Hoy, todavía sin IA incorporada. Pero con el proceso estructurado (etapas, datos ordenados, trazabilidad) que es la condición previa para incorporarla rápido, cuando haga falta.</div>
+            <div class="col-body" style="font-size:26px;">Hoy, todavía sin IA incorporada. Pero con el proceso estructurado (etapas, datos ordenados, trazabilidad) que es la condición previa para incorporarla rápido, cuando haga falta.</div>
           </div>
           <div class="bridge-beam reveal r4"><span>La herramienta no reemplaza el criterio. Le da la estructura para gobernarlo.</span></div>
           <div class="col reveal r4">
             <div class="col-kicker">Curso · Puente al Futuro</div>
-            <div class="col-body">Tres módulos: fundamentos y prompting · planificación asistida del proceso · selección, adjudicación y seguimiento. No reemplaza el criterio profesional de nadie.</div>
+            <div class="col-body" style="font-size:26px;">Tres módulos: fundamentos y prompting · planificación asistida del proceso · selección, adjudicación y seguimiento. No reemplaza el criterio profesional de nadie.</div>
           </div>
         </div>
       </div>
@@ -921,13 +936,10 @@
   var GAUGE_LEN = 251;
   function animateGauges(slide){
     var arcs = slide.querySelectorAll(".gauge-arc[data-target]");
-    var order = Array.prototype.slice.call(arcs).sort(function(a,b){
-      return parseFloat(b.getAttribute("data-target")) - parseFloat(a.getAttribute("data-target"));
-    });
-    var tones = ["c-good", "c-amber", "c-bad", "c-worse"];
-    order.forEach(function(arc, i){
-      arc.classList.remove("c-good", "c-amber", "c-bad", "c-worse");
-      arc.classList.add(tones[Math.min(i, tones.length-1)]);
+    var tones = ["t1", "t2", "t3", "t4"];
+    arcs.forEach(function(arc, i){
+      arc.classList.remove("t1", "t2", "t3", "t4");
+      arc.classList.add(tones[i % tones.length]);
     });
     arcs.forEach(function(arc){
       var target = parseFloat(arc.getAttribute("data-target"));
