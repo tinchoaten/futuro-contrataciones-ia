@@ -251,6 +251,38 @@
   @media (prefers-reduced-motion: reduce){
     .slide, .reveal, #progressFill{ transition:none !important; }
   }
+
+  /* --------- buddy: personaje que camina por las slides minimalistas --------- */
+  .cc-buddy-wrap{
+    position:absolute; bottom:130px; left:-90px; width:54px; height:54px;
+    z-index:5; pointer-events:none;
+    animation: cc-walk 9s linear forwards;
+  }
+  @keyframes cc-walk{
+    0%{ left:-90px; }
+    100%{ left:1680px; }
+  }
+  .cc-buddy{ position:relative; width:100%; height:100%; animation: cc-bob .5s ease-in-out infinite; }
+  @keyframes cc-bob{
+    0%,100%{ transform:translateY(0) rotate(-4deg); }
+    50%{ transform:translateY(-6px) rotate(4deg); }
+  }
+  .cc-buddy.spin{ animation: cc-spin .8s ease-in-out; }
+  @keyframes cc-spin{
+    0%{ transform:rotate(0deg) translateY(0); }
+    45%{ transform:rotate(200deg) translateY(-30px); }
+    100%{ transform:rotate(360deg) translateY(0); }
+  }
+  .cc-buddy svg{ width:100%; height:100%; display:block; overflow:visible; }
+  .cc-leg{ transform-origin:24px 40px; animation:cc-step .48s ease-in-out infinite; }
+  .cc-leg.b{ transform-origin:36px 40px; animation-delay:.24s; }
+  @keyframes cc-step{
+    0%,100%{ transform:rotate(20deg); }
+    50%{ transform:rotate(-20deg); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .cc-buddy-wrap, .cc-buddy, .cc-leg{ animation:none !important; display:none; }
+  }
 </style>
 </head>
 <body>
@@ -310,7 +342,7 @@
     </section>
 
     <!-- ================= SLIDE 4 — divisor bloque 2 ================= -->
-    <section class="slide dark" data-notes="Replantear la pregunta central del bloque: ya no es si el oferente lee el pliego, sino si el pliego está escrito de manera que se pueda leer bien, por una persona y por una máquina.">
+    <section class="slide dark" data-notes="Replantear la pregunta central del bloque: ya no es si el oferente lee el pliego, sino si el pliego está escrito de manera que se pueda leer bien, por una persona y por una máquina." data-buddy>
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="reticle-wrap" data-ring></div>
       <div class="kicker reveal r1">Bloque 2 · El oferente algorítmico</div>
@@ -414,7 +446,7 @@
     </section>
 
     <!-- ================= SLIDE 9 — divisor bloque 3 (idea ancla 1) ================= -->
-    <section class="slide dark" data-notes="Primera repetición completa de la idea ancla, con su segunda mitad: tampoco hace falta alquilar el criterio. Esa es la parte que menos se discute.">
+    <section class="slide dark" data-notes="Primera repetición completa de la idea ancla, con su segunda mitad: tampoco hace falta alquilar el criterio. Esa es la parte que menos se discute." data-buddy>
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="reticle-wrap" data-ring></div>
       <div class="kicker reveal r1">Bloque 3 · El ritmo del Estado</div>
@@ -488,7 +520,7 @@
     </section>
 
     <!-- ================= SLIDE 14 — divisor bloque 4 ================= -->
-    <section class="slide dark" data-notes="La tentación es reaccionar con dos respuestas fáciles: prohibir, o mirar para otro lado. Ninguna funciona. La alternativa real es preparar el terreno: capacitar a funcionarios y proveedores, y repensar documentos y procedimientos.">
+    <section class="slide dark" data-notes="La tentación es reaccionar con dos respuestas fáciles: prohibir, o mirar para otro lado. Ninguna funciona. La alternativa real es preparar el terreno: capacitar a funcionarios y proveedores, y repensar documentos y procedimientos." data-buddy>
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="reticle-wrap" data-ring></div>
       <div class="kicker reveal r1">Bloque 4 · Preparar el terreno</div>
@@ -516,7 +548,7 @@
     </section>
 
     <!-- ================= SLIDE 16 — divisor bloque 5 ================= -->
-    <section class="slide dark" data-notes="El año pasado, en este mismo encuentro, contamos que venía un pliego rediseñado, un tablero de control y un programa de capacitación. Hoy vengo a contarles que ya está.">
+    <section class="slide dark" data-notes="El año pasado, en este mismo encuentro, contamos que venía un pliego rediseñado, un tablero de control y un programa de capacitación. Hoy vengo a contarles que ya está." data-buddy>
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="reticle-wrap" data-ring></div>
       <div class="kicker reveal r1">Bloque 5 · Lo que venimos haciendo en Santa Fe</div>
@@ -594,7 +626,7 @@
     </section>
 
     <!-- ================= SLIDE 20 — reflexión final ================= -->
-    <section class="slide dark" data-notes="Esa pregunta la pueden hacer ustedes mismos, mañana, sin esperar a nadie. Nosotros ya la venimos haciendo, todavía no tenemos todas las respuestas, y con gusto compartimos lo que fuimos aprendiendo en el camino con cualquiera que quiera empezar.">
+    <section class="slide dark" data-notes="Esa pregunta la pueden hacer ustedes mismos, mañana, sin esperar a nadie. Nosotros ya la venimos haciendo, todavía no tenemos todas las respuestas, y con gusto compartimos lo que fuimos aprendiendo en el camino con cualquiera que quiera empezar." data-buddy>
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="reticle-wrap" data-ring></div>
       <div class="kicker reveal r1">Bloque 6 · Cierre</div>
@@ -605,7 +637,7 @@
     </section>
 
     <!-- ================= SLIDE 21 — gracias ================= -->
-    <section class="slide dark" data-notes="Cierre suave, sin mencionar consultoría de forma explícita. Muchas gracias.">
+    <section class="slide dark" data-notes="Cierre suave, sin mencionar consultoría de forma explícita. Muchas gracias." data-buddy>
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="reticle-wrap" data-ring></div>
       <div class="kicker reveal r1">Gracias</div>
@@ -649,6 +681,21 @@
   </svg>
 </template>
 
+<template id="buddyTpl">
+  <div class="cc-buddy-wrap"><div class="cc-buddy">
+    <svg viewBox="0 0 60 60">
+      <line class="cc-leg a" x1="24" y1="40" x2="18" y2="56" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
+      <line class="cc-leg b" x1="36" y1="40" x2="42" y2="56" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
+      <line x1="20" y1="30" x2="10" y2="20" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
+      <line x1="40" y1="30" x2="50" y2="20" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
+      <rect x="14" y="16" width="32" height="28" rx="10" fill="var(--gold)"/>
+      <circle cx="24" cy="28" r="3" fill="var(--ink)"/>
+      <circle cx="36" cy="28" r="3" fill="var(--ink)"/>
+      <path d="M30 3 L32.4 9.6 L39 12 L32.4 14.4 L30 21 L27.6 14.4 L21 12 L27.6 9.6 Z" fill="var(--gold)"/>
+    </svg>
+  </div></div>
+</template>
+
 <script>
 (function(){
   "use strict";
@@ -666,6 +713,12 @@
   var ringTpl = document.getElementById("reticleSVG");
   document.querySelectorAll("[data-ring]").forEach(function(wrap){
     wrap.appendChild(ringTpl.content.cloneNode(true));
+  });
+
+  // --- montar el buddy (una vez) en cada slide minimalista ---
+  var buddyTpl = document.getElementById("buddyTpl");
+  document.querySelectorAll("[data-buddy]").forEach(function(slide){
+    slide.appendChild(buddyTpl.content.cloneNode(true));
   });
 
   // --- escalado del stage al viewport, preservando 16:9 ---
@@ -764,12 +817,39 @@
     }, startDelay + flags.length*stepDelay + 300);
   }
 
+  // --- buddy: camina de punta a punta y hace una pirueta a mitad de camino ---
+  var buddyGen = 0;
+  function runBuddy(slide){
+    var wrap = slide.querySelector(".cc-buddy-wrap");
+    if (!wrap) return;
+    buddyGen++;
+    var myGen = buddyGen;
+    var body = wrap.querySelector(".cc-buddy");
+    body.classList.remove("spin");
+    if (reduced) return;
+    // reiniciar la animación de caminata cada vez que se activa la slide
+    wrap.style.animation = "none";
+    body.style.animation = "none";
+    void wrap.offsetWidth;
+    wrap.style.animation = "";
+    body.style.animation = "";
+    setTimeout(function(){
+      if (myGen !== buddyGen) return;
+      body.classList.add("spin");
+      setTimeout(function(){
+        if (myGen !== buddyGen) return;
+        body.classList.remove("spin");
+      }, 800);
+    }, 4200);
+  }
+
   // --- disparar las animaciones propias de cada slide al activarla ---
   function runSlideAnimations(s){
     animateNumbers(s);
     var twEl = s.querySelector("[data-typewriter]");
     if (twEl) runTypewriter(twEl);
     if (s.querySelector(".demo-doc")) runDemo(s);
+    runBuddy(s);
   }
 
   // --- notas ---
