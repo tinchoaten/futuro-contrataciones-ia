@@ -180,7 +180,7 @@
   .gauge-arc.t3{ stroke:#B0512E; }
   .gauge-arc.t4{ stroke:#5B3B63; }
   .gauge-wrap{ position:relative; }
-  .gauge-value{ font-family:var(--font-human); font-weight:700; fill:var(--text-l); font-size:40px; }
+  .gauge-value{ font-family:var(--font-human); font-weight:700; fill:var(--text-l); font-size:40px; dominant-baseline:central; }
   .gauge .stat-label{ margin-top:12px; text-align:center; font-size:23px; }
 
   /* fila con caja/candado (lock-in) */
@@ -460,21 +460,23 @@
     <section class="slide light" data-notes="Estudio 'Large Legal Fictions' de Stanford (Dan Ho et al.), sobre más de 800.000 consultas jurídicas verificables. Honestidad antes de que la marquen ustedes: esto midió jurisprudencia norteamericana, no pliegos argentinos. No sabemos la tasa exacta sobre un pliego nuestro, pero alcanza para ser prudentes.">
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="kicker reveal r1">Bloque 2 · Evidencia</div>
-      <div class="content">
-        <h1 class="content-title reveal r2">Ni las herramientas hechas a medida para el derecho están exentas.</h1>
+      <div class="content" style="justify-content:flex-start; padding-top:64px;">
+        <h1 class="content-title reveal r2" style="font-size:50px; margin-bottom:20px;">Ni las herramientas hechas a medida para el derecho están exentas.</h1>
         <div class="two-col" style="margin-top:8px;">
           <div class="col reveal r3">
             <div class="col-kicker">Modelos de propósito general</div>
-            <div class="stat-value" style="font-size:72px;">58–88%</div>
-            <div class="col-body">GPT-4, GPT-3.5 y Llama 2, sobre consultas jurídicas verificables.</div>
+            <div class="stat-value" style="font-size:76px; white-space:nowrap;">58–88%</div>
+            <div class="stat-label" style="margin-top:2px;">de tasa de error</div>
+            <div class="col-body" style="font-size:24px; margin-top:16px;">GPT-4, GPT-3.5 y Llama 2, sobre consultas jurídicas verificables.</div>
           </div>
           <div class="col reveal r4">
             <div class="col-kicker">Herramientas jurídicas especializadas</div>
-            <div class="stat-value" style="font-size:72px;">17–33%</div>
-            <div class="col-body">Westlaw AI-Assisted Research y Lexis+ AI: entrenadas para esto, y aun así fallan.</div>
+            <div class="stat-value" style="font-size:76px; white-space:nowrap;">17–33%</div>
+            <div class="stat-label" style="margin-top:2px;">de tasa de error</div>
+            <div class="col-body" style="font-size:24px; margin-top:16px;">Westlaw AI-Assisted Research y Lexis+ AI: entrenadas para esto, y aun así fallan.</div>
           </div>
         </div>
-        <div class="attribution reveal r5" style="margin-top:24px;">Stanford, "Large Legal Fictions" — más de 800.000 consultas jurídicas verificables.</div>
+        <div class="attribution reveal r5" style="margin-top:20px;">Stanford, "Large Legal Fictions" — más de 800.000 consultas jurídicas verificables.</div>
       </div>
       <div class="pagenum">06 / 22</div>
     </section>
@@ -516,7 +518,7 @@
               <svg viewBox="0 0 200 106" class="gauge-svg">
                 <path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/>
                 <path class="gauge-arc" data-target="100" d="M20,100 A80,80 0 0 1 180,100"/>
-                <text class="gauge-value" data-target="100" data-suffix="%" x="100" y="66" text-anchor="middle">0%</text>
+                <text class="gauge-value" data-target="100" data-suffix="%" x="100" y="68" text-anchor="middle">0%</text>
               </svg>
             </div>
             <div class="stat-label">Objeto de la contratación: claro</div>
@@ -526,7 +528,7 @@
               <svg viewBox="0 0 200 106" class="gauge-svg">
                 <path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/>
                 <path class="gauge-arc" data-target="78" d="M20,100 A80,80 0 0 1 180,100"/>
-                <text class="gauge-value" data-target="78" data-suffix="%" x="100" y="66" text-anchor="middle">0%</text>
+                <text class="gauge-value" data-target="78" data-suffix="%" x="100" y="68" text-anchor="middle">0%</text>
               </svg>
             </div>
             <div class="stat-label">de los pliegos, con ambigüedad</div>
@@ -536,7 +538,7 @@
               <svg viewBox="0 0 200 106" class="gauge-svg">
                 <path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/>
                 <path class="gauge-arc" data-target="66" d="M20,100 A80,80 0 0 1 180,100"/>
-                <text class="gauge-value" data-target="66" data-suffix="%" x="100" y="66" text-anchor="middle">0%</text>
+                <text class="gauge-value" data-target="66" data-suffix="%" x="100" y="68" text-anchor="middle">0%</text>
               </svg>
             </div>
             <div class="stat-label">falla en cómo se pondera la oferta</div>
@@ -546,7 +548,7 @@
               <svg viewBox="0 0 200 106" class="gauge-svg">
                 <path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/>
                 <path class="gauge-arc" data-target="62" d="M20,100 A80,80 0 0 1 180,100"/>
-                <text class="gauge-value" data-target="62" data-suffix="%" x="100" y="66" text-anchor="middle">0%</text>
+                <text class="gauge-value" data-target="62" data-suffix="%" x="100" y="68" text-anchor="middle">0%</text>
               </svg>
             </div>
             <div class="stat-label">cumplimiento promedio general</div>
@@ -620,12 +622,12 @@
     </section>
 
     <!-- ================= SLIDE 11 — categoría de proveedores (Ethix) ================= -->
-    <section class="slide light" data-notes="No es sobre esta empresa puntual: es sobre una categoría entera de proveedores que le están vendiendo a las provincias, este año, exactamente este tipo de solución. Ethix es un ejemplo entre varios. Me junté con esa gente y vi el producto: es serio, resuelve un problema real. Detrás hay modelos de terceros conocidos combinados con modelos propios entrenados sobre licitaciones reales: no simplificar esto a 'son los mismos modelos que ChatGPT'. La pregunta que importa no es si el producto sirve, sino qué pasa el día que la provincia quiere dejar de usarlo.">
+    <section class="slide light" data-notes="No es sobre esta empresa puntual: es sobre una categoría entera de proveedores que le están vendiendo a las provincias, este año, exactamente este tipo de solución. Ethix es un ejemplo entre varios. Detrás hay modelos de terceros conocidos combinados con modelos propios entrenados sobre licitaciones reales: no simplificar esto a 'son los mismos modelos que ChatGPT'. La pregunta que importa no es si el producto sirve, sino qué pasa el día que la provincia quiere dejar de usarlo.">
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="kicker reveal r1">Bloque 3 · Una categoría de proveedores</div>
       <div class="content">
         <h1 class="content-title reveal r2">Ya le están vendiendo esto a las provincias, este año</h1>
-        <div class="body-text reveal r3">Un ejemplo real, entre varios: Ethix. Detección de irregularidades y patrones de colusión con inteligencia artificial. Es un producto serio: lo vi funcionando. Combina modelos propios, entrenados con licitaciones reales, con modelos de terceros (OpenAI, Gemini, Anthropic, Mistral).</div>
+        <div class="body-text reveal r3">Un ejemplo real, entre varios: Ethix. Detección de irregularidades y patrones de colusión con inteligencia artificial. Combina modelos propios, entrenados con licitaciones reales, con modelos de terceros (OpenAI, Gemini, Anthropic, Mistral).</div>
         <div class="highlight-line reveal r4">La pregunta no es si sirve. Es qué pasa el día que la provincia quiere dejar de usarlo.</div>
       </div>
       <div class="pagenum">11 / 21</div>
@@ -635,13 +637,13 @@
     <section class="slide light" data-notes="No es mala fe de nadie, es física contractual: el componente que de verdad interpreta y decide casi nunca queda tan abierto como el resto. Y hay una segunda capa más silenciosa: muchos contratos venden, junto con el software, el equipo que lo opera y lo entrena. Ahí no se terceriza una herramienta, se terceriza el criterio.">
       <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
       <div class="kicker reveal r1">Bloque 3 · Antes de comprar la solución</div>
-      <div class="content" style="justify-content:flex-start; padding-top:70px;">
-        <h1 class="content-title reveal r2" style="font-size:44px; margin-bottom:16px;">El riesgo no es el producto. Es el día que lo querés dejar.</h1>
-        <div class="lockrow" style="margin-top:10px;">
+      <div class="content" style="justify-content:flex-start; padding-top:50px;">
+        <h1 class="content-title reveal r2" style="font-size:50px; margin-bottom:14px;">El riesgo no es el producto. Es el día que lo querés dejar.</h1>
+        <div class="lockrow" style="margin-top:6px;">
           <ul class="blist" style="margin-top:0;">
-            <li class="reveal r3" style="font-size:25px; margin-bottom:18px;"><b>Capa superficial (abierta):</b> interoperabilidad aparente, conecta con cualquier plataforma</li>
-            <li class="reveal r4" style="font-size:25px; margin-bottom:18px;"><b>Capa profunda (la caja negra):</b> el motor que interpreta y decide casi nunca queda tan abierto como el resto</li>
-            <li class="reveal r5" style="font-size:25px; margin-bottom:18px;">Se terceriza el criterio: no solo la herramienta, también el equipo que la entrena y la opera. ¿Hay una cláusula de salida ordenada?</li>
+            <li class="reveal r3" style="font-size:27px; margin-bottom:14px;"><b>Capa superficial (abierta):</b> interoperabilidad aparente, conecta con cualquier plataforma</li>
+            <li class="reveal r4" style="font-size:27px; margin-bottom:14px;"><b>Capa profunda (la caja negra):</b> el motor que interpreta y decide casi nunca queda tan abierto como el resto</li>
+            <li class="reveal r5" style="font-size:27px; margin-bottom:14px;">Se terceriza el criterio: no solo la herramienta, también el equipo que la entrena y la opera. ¿Hay una cláusula de salida ordenada?</li>
           </ul>
           <div class="lockbox reveal r5">
             <svg viewBox="0 0 200 200">
