@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El futuro de las contrataciones públicas: usar la IA</title>
+<style>
+  :root{
+    --ink:#14171F;
+    --paper:#F4F1EA;
+    --lightbg:#F7F4EE;
+    --muted-d:#9AA0AE;
+    --muted-l:#6E7180;
+    --gold:#E3A73F;
+    --goldl:#A3701D;
+    --gold-dim:#8A6E3D;
+    --text-l:#23252E;
+    --box-l:#EDE8DA;
+    --font-human: Arial, Helvetica, "Liberation Sans", sans-serif;
+    --font-system: "Courier New", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  *{ box-sizing:border-box; }
+  html,body{
+    margin:0; padding:0; width:100%; height:100%;
+    background:#000; overflow:hidden;
+    font-family:var(--font-human);
+    -webkit-font-smoothing:antialiased;
+  }
+  #viewport{
+    position:fixed; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    background:#000;
+  }
+  #stage{
+    position:relative;
+    width:1600px; height:900px;
+    transform-origin: center center;
+    background:var(--ink);
+    overflow:hidden;
+    box-shadow: 0 0 80px rgba(0,0,0,.6);
+  }
+
+  /* ---------- slides ---------- */
+  .slide{
+    position:absolute; inset:0;
+    padding:56px 72px;
+    opacity:0; pointer-events:none;
+    transform: translateY(16px);
+    transition: opacity .48s cubic-bezier(.22,.61,.36,1), transform .52s cubic-bezier(.22,.61,.36,1);
+    z-index:1;
+  }
+  .slide.active{
+    opacity:1; pointer-events:auto; transform:translateY(0); z-index:2;
+  }
+  .slide.dark{ background:var(--ink); color:var(--paper); }
+  .slide.light{ background:var(--lightbg); color:var(--text-l); }
+
+  /* corner marks */
+  .corners span{ position:absolute; width:22px; height:22px; opacity:.55; }
+  .slide.dark .corners span{ border-color:var(--gold); }
+  .slide.light .corners span{ border-color:var(--text-l); opacity:.28; }
+  .c-tl{ top:34px; left:34px; border-top:1px solid; border-left:1px solid; }
+  .c-br{ bottom:34px; right:34px; border-bottom:1px solid; border-right:1px solid; }
+
+  /* kicker */
+  .kicker{
+    font-family:var(--font-system); font-weight:700; font-size:19px;
+    letter-spacing:3.5px; text-transform:uppercase;
+    position:absolute; top:52px; left:72px; right:220px;
+  }
+  .slide.dark .kicker{ color:var(--gold); }
+  .slide.light .kicker{ color:var(--goldl); }
+
+  /* page counter */
+  .pagenum{
+    position:absolute; bottom:38px; right:56px;
+    font-family:var(--font-system); font-size:14px; letter-spacing:1px;
+  }
+  .slide.dark .pagenum{ color:var(--muted-d); }
+  .slide.light .pagenum{ color:var(--muted-l); }
+
+  /* reticle (solo slides oscuras) */
+  .reticle-wrap{ position:absolute; right:-60px; top:50%; transform:translateY(-50%); width:480px; height:480px; pointer-events:none; }
+  .reticle-wrap svg{ width:100%; height:100%; overflow:visible; }
+  .reticle-label{
+    position:absolute; left:-34px; top:50%; transform:translateY(-50%) rotate(180deg);
+    writing-mode:vertical-rl; font-family:var(--font-system); font-size:12px;
+    letter-spacing:2.5px; color:var(--gold-dim);
+  }
+
+  /* content blocks */
+  .content{ position:relative; height:100%; display:flex; flex-direction:column; justify-content:flex-start; padding-top:118px; max-width:980px; }
+  .content.narrow{ max-width:900px; }
+
+  h1.big-title{ font-size:64px; line-height:1.08; font-weight:700; margin:0 0 18px; color:var(--paper); max-width:920px; }
+  h1.quote-title{ font-size:46px; line-height:1.16; font-weight:700; margin:0; color:var(--paper); max-width:920px; }
+  h1.quote-title.smaller{ font-size:38px; }
+  h1.content-title{ font-size:46px; line-height:1.15; font-weight:700; margin:0 0 14px; color:var(--text-l); max-width:900px; }
+
+  .subtitle-italic{ font-family:var(--font-human); font-style:italic; font-size:24px; margin:6px 0 0; }
+  .slide.dark .subtitle-italic{ color:var(--gold); }
+  .slide.light .subtitle-italic{ color:var(--goldl); }
+
+  .muted-line{ font-size:20px; margin-top:14px; }
+  .slide.dark .muted-line{ color:var(--muted-d); }
+  .slide.light .muted-line{ color:var(--muted-l); }
+
+  .body-text{ font-size:24px; line-height:1.5; max-width:880px; }
+  .slide.light .body-text{ color:var(--text-l); }
+  .slide.dark .body-text{ color:var(--paper); }
+
+  .highlight-line{ font-size:27px; font-weight:700; font-style:italic; margin-top:22px; }
+  .slide.light .highlight-line{ color:var(--goldl); }
+
+  /* stat grid */
+  .stat-grid{ display:flex; gap:34px; margin-top:26px; }
+  .stat{ width:280px; }
+  .stat-value{ font-size:74px; font-weight:700; color:var(--goldl); line-height:1; }
+  .stat-label{ font-size:18px; margin-top:12px; line-height:1.3; }
+  .slide.light .stat-label{ color:var(--muted-l); }
+
+  /* two-col */
+  .two-col{ display:flex; gap:64px; margin-top:30px; }
+  .col{ flex:1; max-width:420px; }
+  .col-kicker{ font-family:var(--font-system); font-weight:700; font-size:17px; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; }
+  .slide.dark .col-kicker{ color:var(--gold); }
+  .slide.light .col-kicker{ color:var(--goldl); }
+  .col-body{ font-size:23px; line-height:1.48; }
+  .slide.dark .col-body{ color:var(--paper); }
+  .slide.light .col-body{ color:var(--text-l); }
+
+  /* bullet list */
+  ul.blist{ list-style:none; margin:26px 0 0; padding:0; max-width:880px; }
+  ul.blist li{ position:relative; padding-left:30px; font-size:23px; line-height:1.5; margin-bottom:20px; }
+  ul.blist li::before{ content:""; position:absolute; left:0; top:9px; width:9px; height:9px; background:var(--goldl); }
+  .slide.dark ul.blist li::before{ background:var(--gold); }
+
+  /* timeline */
+  .timeline{ display:flex; gap:34px; margin-top:30px; }
+  .tl-step{ width:280px; }
+  .tl-num{ font-family:var(--font-system); font-weight:700; font-size:19px; color:var(--goldl); margin-bottom:10px; }
+  .tl-label{ font-weight:700; font-size:21px; color:var(--text-l); margin-bottom:10px; }
+  .tl-desc{ font-size:17px; color:var(--muted-l); line-height:1.35; }
+
+  /* caveat box */
+  .box{ background:var(--box-l); padding:26px 30px; margin-top:24px; max-width:900px; }
+  .box p{ margin:0; font-size:21px; line-height:1.45; color:var(--text-l); }
+  .attribution{ font-size:20px; color:var(--muted-l); margin-top:6px; }
+
+  /* side box (slide 17) */
+  .with-side{ display:flex; gap:40px; margin-top:24px; align-items:flex-start; }
+  .with-side .blist-wrap{ flex:1; }
+  .side-box{ width:330px; background:var(--box-l); padding:22px 24px; font-size:17px; line-height:1.4; color:var(--text-l); flex-shrink:0; }
+
+  /* footer (portada / gracias) */
+  .foot-name{ position:absolute; left:72px; bottom:100px; font-size:20px; font-weight:700; color:var(--paper); }
+  .foot-meta{ position:absolute; left:72px; bottom:66px; font-family:var(--font-system); font-size:15px; letter-spacing:1px; color:var(--muted-d); max-width:900px; }
+
+  /* comparacion 2/10 vs 9/10 */
+  .compare-wrap{ margin-top:26px; }
+  .compare-label{ font-family:var(--font-system); font-weight:700; font-size:17px; letter-spacing:1.5px; color:var(--gold); text-transform:uppercase; max-width:820px; line-height:1.4; }
+  .compare-row{ display:flex; gap:70px; margin-top:22px; }
+  .compare-item{ width:320px; }
+  .compare-num{ font-size:64px; font-weight:700; line-height:1; }
+  .compare-num.dim{ color:var(--muted-d); }
+  .compare-num.gold{ color:var(--gold); }
+  .compare-cap{ font-size:18px; margin-top:10px; line-height:1.3; }
+  .compare-cap.dim{ color:var(--muted-d); }
+  .compare-cap.light{ color:var(--paper); }
+
+  /* --------- demo de lectura en vivo --------- */
+  .demo-wrap{ display:flex; gap:46px; margin-top:20px; align-items:flex-start; }
+  .demo-doc{
+    background:#fff; width:640px; padding:34px 40px; font-family: Georgia, "Times New Roman", serif;
+    font-size:18px; line-height:1.62; color:#26241f; box-shadow:0 20px 46px rgba(20,17,10,.10);
+    position:relative; flex-shrink:0;
+  }
+  .demo-doc .art{ font-weight:700; font-family:var(--font-human); font-size:13px; letter-spacing:1px; color:#8a8470; margin:0 0 6px; text-transform:uppercase; }
+  .demo-doc p{ margin:0 0 22px; }
+  .demo-doc p:last-child{ margin-bottom:0; }
+  .demo-doc .fine{ position:absolute; left:40px; bottom:14px; font-family:var(--font-human); font-size:12px; color:#b7b0a0; }
+  .flag{
+    background-image:linear-gradient(var(--gold),var(--gold));
+    background-repeat:no-repeat; background-size:0% 100%; background-position:0 0;
+    transition:background-size .55s ease; box-decoration-break:clone; -webkit-box-decoration-break:clone;
+  }
+  .flag.hit{ background-size:100% 100%; }
+
+  .annot-rail{ width:280px; padding-top:4px; }
+  .annot-item{ opacity:0; transform:translateX(14px); transition:opacity .45s ease, transform .45s ease; margin-bottom:26px; padding-left:18px; border-left:2px solid var(--gold); }
+  .annot-item.show{ opacity:1; transform:translateX(0); }
+  .annot-item .a-num{ font-family:var(--font-system); font-size:12px; color:var(--goldl); font-weight:700; margin-bottom:4px; letter-spacing:1px; }
+  .annot-item .a-text{ font-family:var(--font-system); font-size:14.5px; line-height:1.42; color:var(--text-l); }
+
+  .demo-summary{ margin-top:4px; font-size:19px; font-weight:700; font-style:italic; color:var(--goldl); opacity:0; transition:opacity .6s ease; }
+  .demo-summary.show{ opacity:1; }
+
+  /* --------- typewriter --------- */
+  .tw-cursor{ display:inline-block; width:.5ch; background:var(--gold); margin-left:2px; animation:twblink 1s step-end infinite; }
+  @keyframes twblink{ 50%{ opacity:0; } }
+
+  /* --------- animaciones de entrada (disparadas al activar la slide) --------- */
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease; }
+  .slide.active .reveal{ opacity:1; transform:translateY(0); }
+  .slide.active .reveal.r1{ transition-delay:.05s; }
+  .slide.active .reveal.r2{ transition-delay:.15s; }
+  .slide.active .reveal.r3{ transition-delay:.25s; }
+  .slide.active .reveal.r4{ transition-delay:.35s; }
+  .slide.active .reveal.r5{ transition-delay:.45s; }
+
+  /* progress bar superior */
+  #progressTrack{ position:fixed; top:0; left:0; width:100%; height:3px; background:rgba(255,255,255,.06); z-index:50; }
+  #progressFill{ height:100%; width:0%; background:var(--gold); transition:width .5s cubic-bezier(.22,.61,.36,1); }
+
+  /* controles */
+  #fsBtn{
+    position:fixed; left:18px; bottom:16px; z-index:60;
+    font-family:var(--font-system); font-size:13px; letter-spacing:1px;
+    color:var(--muted-d); background:transparent; border:1px solid rgba(255,255,255,.18);
+    padding:7px 12px; cursor:pointer; opacity:.55; transition:opacity .2s;
+  }
+  #fsBtn:hover{ opacity:1; }
+
+  /* zonas de click */
+  .clickzone{ position:fixed; top:0; bottom:0; z-index:40; cursor:pointer; }
+  #zPrev{ left:0; width:26%; }
+  #zNext{ left:26%; width:74%; }
+
+  /* panel de notas */
+  #notesPanel{
+    position:fixed; left:0; right:0; bottom:0; z-index:70;
+    background:rgba(10,11,15,.96); border-top:1px solid rgba(227,167,63,.35);
+    color:var(--paper); padding:26px 64px 30px; max-height:34vh; overflow:auto;
+    transform:translateY(100%); transition:transform .32s ease;
+  }
+  #notesPanel.open{ transform:translateY(0); }
+  #notesPanel .n-label{ font-family:var(--font-system); font-size:12px; letter-spacing:2.5px; color:var(--gold); margin-bottom:10px; }
+  #notesPanel .n-text{ font-size:19px; line-height:1.5; max-width:1100px; }
+
+  /* hint inicial */
+  #hint{
+    position:fixed; inset:0; z-index:90; background:rgba(6,7,10,.88);
+    color:var(--paper); display:flex; align-items:center; justify-content:center;
+    text-align:center; transition:opacity .5s ease; font-size:20px; line-height:1.8;
+  }
+  #hint.hidden{ opacity:0; pointer-events:none; }
+  #hint b{ color:var(--gold); font-family:var(--font-system); letter-spacing:1px; }
+  #hint .hint-box{ max-width:640px; }
+  #hint .hint-title{ font-size:15px; letter-spacing:3px; color:var(--gold-dim); font-family:var(--font-system); margin-bottom:18px; text-transform:uppercase; }
+
+  @media (prefers-reduced-motion: reduce){
+    .slide, .reveal, #progressFill{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progressTrack"><div id="progressFill"></div></div>
+
+<div id="viewport">
+  <div id="stage">
+
+    <!-- ================= SLIDE 1 — PORTADA ================= -->
+    <section class="slide dark active" data-notes="Charla ante los máximos responsables de contrataciones públicas de las provincias argentinas. Espíritu TEDx: narrativa, no una sucesión de diapositivas con viñetas. 30-40 minutos.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="reticle-wrap" data-ring><span class="reticle-label">LECTURA · IA</span></div>
+      <div class="kicker reveal r1">TEMA_03</div>
+      <div class="content">
+        <h1 class="big-title reveal r2">El futuro de las<br>contrataciones públicas</h1>
+        <div class="subtitle-italic reveal r3">usar la <b style="font-family:var(--font-system); font-style:normal; color:var(--gold);">IA</b></div>
+      </div>
+      <div class="foot-name reveal r4">Juan Martín Atencio &nbsp;·&nbsp; Subsecretario de Innovación Pública, Santa Fe</div>
+      <div class="foot-meta reveal r5">ENCUENTRO · MÁXIMOS RESPONSABLES DE CONTRATACIONES PÚBLICAS · PROVINCIAS ARGENTINAS</div>
+      <div class="pagenum">01 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 2 — 2 de 10 ================= -->
+    <section class="slide dark" data-notes="A compradores públicos de varias provincias les pedimos pasar su propio pliego por 10 preguntas simples, sin IA todavía. Uno aprobó apenas 2 de 10. No decir de qué provincia: el problema no es la gente, es que el pliego se sigue escribiendo para un solo lector, cuando dejó de ser el único.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="reticle-wrap" data-ring></div>
+      <div class="kicker reveal r1">Bloque 1 · Apertura</div>
+      <div class="content">
+        <div class="stat-value reveal r2" data-target="2" data-suffix=" de 10" style="font-size:110px;">0 de 10</div>
+        <div class="col-kicker reveal r3" style="margin-top:22px; font-size:19px;">PREGUNTAS QUE APROBÓ UN PLIEGO REAL</div>
+        <div class="subtitle-italic reveal r4" style="font-style:italic;">Diez preguntas de sentido común. Sin inteligencia artificial, todavía.</div>
+        <div class="muted-line reveal r5">¿Se entiende el objeto? ¿Se encuentra el plazo? ¿Queda clara la ponderación?</div>
+      </div>
+      <div class="pagenum">02 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 3 — dos lectores ================= -->
+    <section class="slide light" data-notes="Explicar el cambio: además del lector humano de siempre apareció uno nuevo que no lee como nosotros. Mientras discutimos si conviene invertir en IA para compras, del otro lado del mostrador ya la tienen disponible, sin pedir permiso y sin avisar.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="kicker reveal r1">Bloque 1 · Apertura</div>
+      <div class="content">
+        <h1 class="content-title reveal r2">&ldquo;Nadie lee los pliegos completos&rdquo;</h1>
+        <div class="subtitle-italic reveal r2">Dejó de ser cierto. Pasó a ser incompleto.</div>
+        <div class="two-col">
+          <div class="col reveal r3">
+            <div class="col-kicker">El lector de siempre</div>
+            <div class="col-body">Una persona, con capacidad y tiempo limitados. Lee lo que le afecta y pasa por arriba el resto. Es lo razonable.</div>
+          </div>
+          <div class="col reveal r4">
+            <div class="col-kicker">El lector nuevo</div>
+            <div class="col-body">Una máquina, con una capacidad completamente distinta. No pide permiso. No avisa que llegó.</div>
+          </div>
+        </div>
+      </div>
+      <div class="pagenum">03 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 4 — divisor bloque 2 ================= -->
+    <section class="slide dark" data-notes="Replantear la pregunta central del bloque: ya no es si el oferente lee el pliego, sino si el pliego está escrito de manera que se pueda leer bien, por una persona y por una máquina.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="reticle-wrap" data-ring></div>
+      <div class="kicker reveal r1">Bloque 2 · El oferente algorítmico</div>
+      <div class="content" style="justify-content:center; padding-top:0;">
+        <h1 class="quote-title reveal r2" id="tw-slide4" data-typewriter="La pregunta ya no es si el proveedor lee el pliego. Es si el pliego se puede leer bien, por una persona y por una máquina.">&nbsp;</h1>
+      </div>
+      <div class="pagenum">04 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 5 — buscador vs IA generativa ================= -->
+    <section class="slide light" data-notes="El detalle que cambia todo: un buscador que no encuentra algo dice cero resultados. Una IA generativa no avisa que no encontró algo: completa, con la misma seguridad que si lo hubiera encontrado. Ejemplos: un requisito inventado, una versión vieja confundida con la vigente, una cláusula que no existe.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="kicker reveal r1">Bloque 2</div>
+      <div class="content">
+        <h1 class="content-title reveal r2">Cuando no encuentra algo&hellip;</h1>
+        <div class="two-col">
+          <div class="col reveal r3">
+            <div class="col-kicker">Un buscador</div>
+            <div class="col-body">Dice &ldquo;cero resultados&rdquo;. Uno sabe que no está.</div>
+          </div>
+          <div class="col reveal r4">
+            <div class="col-kicker">Una IA generativa</div>
+            <div class="col-body">La redacta. Y lo dice con la misma seguridad que si fuera cierto.</div>
+          </div>
+        </div>
+        <div class="muted-line reveal r5" style="font-style:italic; margin-top:34px; font-size:19px; max-width:880px;">Un requisito que no existe. Una versión vieja confundida con la vigente. Una cláusula inventada, con total confianza.</div>
+      </div>
+      <div class="pagenum">05 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 6 — Yale/Stanford ================= -->
+    <section class="slide light" data-notes="No es una sospecha propia: investigadores de Yale y Stanford midieron cómo responden estos sistemas frente a consultas jurídicas verificables y encontraron tasas de error importantes, agravadas porque los modelos casi no reconocen cuándo se equivocan. Aclarar el límite honesto: ese estudio midió jurisprudencia norteamericana, no pliegos argentinos.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="kicker reveal r1">Bloque 2 · Evidencia</div>
+      <div class="content">
+        <h1 class="content-title reveal r2">Tasas de error altas. Y casi no reconocen cuándo se equivocan.</h1>
+        <div class="attribution reveal r2">Investigadores de Yale y Stanford, sobre consultas jurídicas verificables.</div>
+        <div class="box reveal r3">
+          <p>Honestidad antes de que la marquen ustedes: ese estudio midió jurisprudencia norteamericana, no pliegos argentinos. No sabemos cuál es la tasa de error exacta sobre un pliego nuestro. Pero alcanza para ser prudentes.</p>
+        </div>
+      </div>
+      <div class="pagenum">06 / 22</div>
+    </section>
+
+    <!-- ================= SLIDE 7 — demo: así lee un pliego una IA ================= -->
+    <section class="slide light" data-notes="Este fragmento es ilustrativo, redactado para esta charla a partir de los patrones que encontramos en el autodiagnóstico, no es un pliego real. La idea es mostrar, no solo contar: una persona lee estas tres frases y las entiende dentro de la tradición administrativa. Una IA no tiene ese contexto y no avisa que le falta. Esto es exactamente lo que el autodiagnóstico mide como 'ambigüedad' en el 78% de los casos.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="kicker reveal r1">Bloque 2 · Así lee una IA</div>
+      <div class="content">
+        <h1 class="content-title reveal r2">Un fragmento. Miremos cómo lo lee una IA.</h1>
+        <div class="demo-wrap">
+          <div class="demo-doc reveal r3">
+            <div class="art">Artículo 14 · Criterios de evaluación de ofertas</div>
+            <p>La Comisión Evaluadora analizará las propuestas conforme a los criterios técnicos y económicos <span class="flag" data-flag="1">que considere pertinentes</span>, pudiendo asignar mayor ponderación a los aspectos que estime convenientes para los intereses del organismo.</p>
+            <div class="art">Artículo 15 · Plazo de entrega</div>
+            <p>La entrega de los bienes deberá efectuarse en un <span class="flag" data-flag="2">plazo razonable</span>, contado desde la notificación de la Orden de Compra, salvo causas debidamente justificadas, <span class="flag" data-flag="3">a exclusivo juicio de la Administración</span>.</p>
+            <div class="fine">Fragmento ilustrativo, redactado para esta charla.</div>
+          </div>
+          <div class="annot-rail">
+            <div class="annot-item" data-annot="1"><div class="a-num">01</div><div class="a-text">Ponderación sin fórmula ni porcentaje: &ldquo;pertinentes&rdquo;, ¿según quién?</div></div>
+            <div class="annot-item" data-annot="2"><div class="a-num">02</div><div class="a-text">Sin plazo concreto: &iquest;cuántos días son &ldquo;razonable&rdquo;?</div></div>
+            <div class="annot-item" data-annot="3"><div class="a-num">03</div><div class="a-text">Ninguna IA tiene ese contexto cultural. Y no avisa que no lo tiene.</div></div>
+          </div>
+        </div>
+        <div class="demo-summary" id="demoSummary">Tres frases. Ninguna palabra rara. Así se ve el 78% de ambigüedad.</div>
+      </div>
+      <div class="pagenum">07 / 22</div>
+    </section>
+
+    <!-- ================= SLIDE 8 — autodiagnóstico ================= -->
+    <section class="slide light" data-notes="El objeto aparece claro en el 100% de los casos. El criterio que más falla, lejos, es la ambigüedad (78%): una persona lee 'a exclusivo juicio del organismo' y entiende la tradición administrativa; una IA no tiene ese contexto cultural y no avisa que no entendió, rellena. La ponderación falla en dos tercios de los casos, muchas veces porque está repartida entre el pliego y sus anexos. Promedio general: 62%, a mitad de camino de ser legible.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="kicker reveal r1">Autodiagnóstico de pliegos · No es una encuesta</div>
+      <div class="content">
+        <h1 class="content-title reveal r2">Lo que muestra el autodiagnóstico</h1>
+        <div class="stat-grid">
+          <div class="stat reveal r3"><div class="stat-value" data-target="100" data-suffix="%">0%</div><div class="stat-label">Objeto de la contratación: claro</div></div>
+          <div class="stat reveal r3"><div class="stat-value" data-target="78" data-suffix="%">0%</div><div class="stat-label">de los pliegos, con ambigüedad</div></div>
+          <div class="stat reveal r4"><div class="stat-value" data-target="66" data-suffix="%">0%</div><div class="stat-label">falla en cómo se pondera la oferta</div></div>
+          <div class="stat reveal r4"><div class="stat-value" data-target="62" data-suffix="%">0%</div><div class="stat-label">cumplimiento promedio general</div></div>
+        </div>
+      </div>
+      <div class="pagenum">07 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 8 — progresión ================= -->
+    <section class="slide light" data-notes="La tecnología viene en una progresión conocida. En la última etapa uno deja de pedir una tarea puntual: le da un objetivo y la máquina arma sola la secuencia. No es ciencia ficción lejana: el Banco Mundial ya tiene SOURCe, y en Europa los datos de licitaciones se consultan por API gracias a una ontología pensada para que los lea una máquina. Aclarar con honestidad: en Argentina hoy no hay evidencia de que esto esté pasando de forma significativa del lado de los proveedores. Lo que cambia es la interfaz: un agente de compras del proveedor choca contra una plataforma pensada solo para un empleado administrativo.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="kicker reveal r1">Bloque 2 · Hacia dónde va esto</div>
+      <div class="content">
+        <h1 class="content-title reveal r2">Asistente → generativa → copiloto → agente</h1>
+        <div class="timeline">
+          <div class="tl-step reveal r3"><div class="tl-num">01</div><div class="tl-label">Asistente</div><div class="tl-desc">Responde lo que se le pregunta</div></div>
+          <div class="tl-step reveal r3"><div class="tl-num">02</div><div class="tl-label">Generativa</div><div class="tl-desc">Redacta una respuesta, aunque no la sepa</div></div>
+          <div class="tl-step reveal r4"><div class="tl-num">03</div><div class="tl-label">Copiloto</div><div class="tl-desc">Sugiere el siguiente paso</div></div>
+          <div class="tl-step reveal r4"><div class="tl-num">04</div><div class="tl-label">Agente</div><div class="tl-desc">Recibe un objetivo y arma sola la secuencia</div></div>
+        </div>
+        <div class="muted-line reveal r5" style="font-style:italic; margin-top:30px; font-size:19px; max-width:900px;">Ya existen: SOURCe (Banco Mundial) y la Ontología de Contratación Electrónica (UE). En Argentina, hoy, sin evidencia significativa de proveedores-agente en licitaciones. Pero la tecnología va en esa dirección.</div>
+      </div>
+      <div class="pagenum">08 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 9 — divisor bloque 3 (idea ancla 1) ================= -->
+    <section class="slide dark" data-notes="Primera repetición completa de la idea ancla, con su segunda mitad: tampoco hace falta alquilar el criterio. Esa es la parte que menos se discute.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="reticle-wrap" data-ring></div>
+      <div class="kicker reveal r1">Bloque 3 · El ritmo del Estado</div>
+      <div class="content" style="justify-content:center; padding-top:0;">
+        <h1 class="quote-title reveal r2">No hace falta que el Estado corra más rápido que la IA. Tampoco hace falta alquilar el criterio.</h1>
+      </div>
+      <div class="pagenum">09 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 10 — ritmo ================= -->
+    <section class="slide light" data-notes="Cuando llegó la firma digital o la gestión documental electrónica, el ritmo lo marcaba el desarrollo público. Con la IA generativa eso ya no pasa: cualquier proveedor o empleado tiene acceso hoy por el precio de una suscripción mensual. Para cuando una herramienta propia esté lista, el estándar ya se movió varias veces.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="kicker reveal r1">Bloque 3</div>
+      <div class="content">
+        <h1 class="content-title reveal r2">Antes, el ritmo lo marcaba el desarrollo público. Ya no.</h1>
+        <div class="two-col">
+          <div class="col reveal r3">
+            <div class="col-kicker">Antes</div>
+            <div class="col-body">Firma digital, gestión documental: se licitaba un sistema y se esperaban los tiempos de implementación. Mientras tanto, el resto del mundo esperaba casi al mismo ritmo.</div>
+          </div>
+          <div class="col reveal r4">
+            <div class="col-kicker">Ahora · IA generativa</div>
+            <div class="col-body">Una suscripción mensual. Sin pliego. Sin presupuesto plurianual. Sin esperar un desarrollo a medida.</div>
+          </div>
+        </div>
+      </div>
+      <div class="pagenum">10 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 11 — lock-in ================= -->
+    <section class="slide light" data-notes="No es mala fe de nadie, es física contractual: el componente que de verdad interpreta y decide casi nunca queda tan abierto como el resto. Y hay una segunda capa más silenciosa: muchos contratos venden, junto con el software, el equipo que lo opera y lo entrena. Ahí no se terceriza una herramienta, se terceriza el criterio.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="kicker reveal r1">Bloque 3 · Antes de comprar la solución</div>
+      <div class="content">
+        <h1 class="content-title reveal r2">El riesgo no es el producto. Es el día que lo querés dejar.</h1>
+        <ul class="blist">
+          <li class="reveal r3">Arquitectura cerrada: el motor que interpreta y decide casi nunca queda tan abierto como el resto del sistema</li>
+          <li class="reveal r4">Se terceriza el criterio: no solo la herramienta, también el equipo que la entrena y la opera</li>
+          <li class="reveal r5">¿Hay una cláusula de salida ordenada, o hay que empezar de cero?</li>
+        </ul>
+      </div>
+      <div class="pagenum">11 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 12 — categoría de proveedores (Ethix) ================= -->
+    <section class="slide light" data-notes="No es sobre esta empresa puntual: es sobre una categoría entera de proveedores que le están vendiendo a las provincias, este año, exactamente este tipo de solución. Ethix es un ejemplo entre varios. Me junté con esa gente y vi el producto: es serio, resuelve un problema real. Detrás hay modelos de terceros conocidos combinados con modelos propios entrenados sobre licitaciones reales: no simplificar esto a 'son los mismos modelos que ChatGPT'. La pregunta que importa no es si el producto sirve, sino qué pasa el día que la provincia quiere dejar de usarlo.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="kicker reveal r1">Bloque 3 · Una categoría de proveedores</div>
+      <div class="content">
+        <h1 class="content-title reveal r2">Ya le están vendiendo esto a las provincias, este año</h1>
+        <div class="body-text reveal r3">Un ejemplo real, entre varios: Ethix. Detección de irregularidades y patrones de colusión con inteligencia artificial. Es un producto serio: lo vi funcionando. Combina modelos propios, entrenados con licitaciones reales, con modelos de terceros (OpenAI, Gemini, Anthropic, Mistral).</div>
+        <div class="highlight-line reveal r4">La pregunta no es si sirve. Es qué pasa el día que la provincia quiere dejar de usarlo.</div>
+      </div>
+      <div class="pagenum">12 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 13 — tres preguntas ================= -->
+    <section class="slide light" data-notes="No estoy diciendo que no contraten estas herramientas: estoy diciendo que las lean así antes de firmarlas. Un equipo capacitado no se va cuando termina un contrato.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="kicker reveal r1">Bloque 3 · Antes de firmar</div>
+      <div class="content">
+        <h1 class="content-title reveal r2">Las mismas diez preguntas del pliego, aplicadas al contrato</h1>
+        <ul class="blist">
+          <li class="reveal r3">¿Se van los datos con el proveedor?</li>
+          <li class="reveal r3">¿Se van los criterios que el sistema aprendió sobre las propias licitaciones?</li>
+          <li class="reveal r4">¿Hay una cláusula de salida ordenada?</li>
+        </ul>
+        <div class="highlight-line reveal r5">Hay una alternativa a alquilar el criterio: formarlo adentro.</div>
+      </div>
+      <div class="pagenum">13 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 14 — divisor bloque 4 ================= -->
+    <section class="slide dark" data-notes="La tentación es reaccionar con dos respuestas fáciles: prohibir, o mirar para otro lado. Ninguna funciona. La alternativa real es preparar el terreno: capacitar a funcionarios y proveedores, y repensar documentos y procedimientos.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="reticle-wrap" data-ring></div>
+      <div class="kicker reveal r1">Bloque 4 · Preparar el terreno</div>
+      <div class="content" style="justify-content:center; padding-top:0;">
+        <h1 class="quote-title reveal r2">Prohibir no funciona. Mirar para otro lado, tampoco.</h1>
+        <div class="subtitle-italic reveal r3" style="margin-top:26px; max-width:820px;">La herramienta ya está del otro lado del mostrador, se prohíba o no de este lado.</div>
+      </div>
+      <div class="pagenum">14 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 15 — EncuestaIA-2026 ================= -->
+    <section class="slide light" data-notes="Relevamiento entre agentes de la administración pública provincial: 86% ya usa IA, con un 44% de forma frecuente. El dato que más importa: 98% quiere capacitarse, la gente ya lo está pidiendo. El obstáculo principal no es la resistencia, es no saber usarla bien. Y casi uno de cada cinco tiene dudas legítimas de confidencialidad, que hay que responder con protocolos claros, no con un 'quédense tranquilos'.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="kicker reveal r1">EncuestaIA-2026 · Santa Fe · +3.000 respuestas</div>
+      <div class="content">
+        <h1 class="content-title reveal r2">Esto ya pasó. No es una discusión sobre si va a pasar.</h1>
+        <div class="stat-grid">
+          <div class="stat reveal r3"><div class="stat-value" data-target="86" data-suffix="%">0%</div><div class="stat-label">ya usa IA en su trabajo (44% frecuente, 42% ocasional)</div></div>
+          <div class="stat reveal r3"><div class="stat-value" data-target="98" data-suffix="%">0%</div><div class="stat-label">quiere capacitarse en IA aplicada a su trabajo</div></div>
+          <div class="stat reveal r4"><div class="stat-value" data-target="30" data-suffix="%">0%</div><div class="stat-label">no sabe usarla bien: el obstáculo real, no la resistencia</div></div>
+          <div class="stat reveal r4"><div class="stat-value" data-target="1" data-suffix="/5">0/5</div><div class="stat-label">tiene dudas sobre la confidencialidad de lo que carga</div></div>
+        </div>
+      </div>
+      <div class="pagenum">15 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 16 — divisor bloque 5 ================= -->
+    <section class="slide dark" data-notes="El año pasado, en este mismo encuentro, contamos que venía un pliego rediseñado, un tablero de control y un programa de capacitación. Hoy vengo a contarles que ya está.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="reticle-wrap" data-ring></div>
+      <div class="kicker reveal r1">Bloque 5 · Lo que venimos haciendo en Santa Fe</div>
+      <div class="content" style="justify-content:center; padding-top:0;">
+        <h1 class="quote-title reveal r2">El año pasado les contamos que esto venía. Hoy no venimos a contarles un plan.</h1>
+      </div>
+      <div class="pagenum">16 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 17 — Pliego Único ================= -->
+    <section class="slide light" data-notes="A fines del año pasado aprobamos, por Decreto 287/2026, un Pliego Único rediseñado con la metodología de contratación visual. No es estética por la estética: un pliego con lógica defensiva produce documentos que solo entienden los abogados. Lo validamos este año en charlas con proveedores, con muy buena recepción.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="kicker reveal r1">Decreto N.º 287/2026</div>
+      <div class="content">
+        <h1 class="content-title reveal r2">Pliego Único: contratación visual</h1>
+        <div class="with-side">
+          <div class="blist-wrap">
+            <ul class="blist" style="margin-top:14px;">
+              <li class="reveal r3">Tipografía pensada para pantalla</li>
+              <li class="reveal r3">Un color distinto por capítulo</li>
+              <li class="reveal r4">Navegación rápida entre secciones</li>
+              <li class="reveal r4">Glosario que de verdad se puede usar</li>
+            </ul>
+          </div>
+          <div class="side-box reveal r4">Un pliego defensivo (redactado para resistir una impugnación) solo lo entienden los abogados. Y ahí las pymes no se presentan: no porque no puedan cumplir el contrato, sino porque les cuesta más entenderlo que ejecutarlo.</div>
+        </div>
+        <div class="highlight-line reveal r5" style="font-size:21px;">Validado este año en charlas con proveedores. La recepción fue muy buena: no hace falta convencer a nadie de que un documento más claro es mejor.</div>
+      </div>
+      <div class="pagenum">17 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 18 — Timbó + curso ================= -->
+    <section class="slide light" data-notes="Timbó Compras hoy no tiene IA incorporada, y decirlo así juega a favor: el punto es que tener el proceso estructurado es la condición previa para incorporarla rápido. El curso de Puente al Futuro (confirmar si ya lanzó a la fecha de la charla) da la estructura para usar estas herramientas con responsabilidad. Ninguna de las tres piezas (pliego, sistema, capacitación) resuelve el problema sola: van juntas.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="kicker reveal r1">Bloque 5</div>
+      <div class="content">
+        <h1 class="content-title reveal r2">El sistema, y la capacitación</h1>
+        <div class="two-col">
+          <div class="col reveal r3">
+            <div class="col-kicker">Timbó Compras</div>
+            <div class="col-body">Hoy, todavía sin IA incorporada. Pero con el proceso estructurado (etapas, datos ordenados, trazabilidad) que es la condición previa para incorporarla rápido, cuando haga falta.</div>
+          </div>
+          <div class="col reveal r4">
+            <div class="col-kicker">Curso · Puente al Futuro</div>
+            <div class="col-body">Tres módulos: fundamentos y prompting · planificación asistida del proceso · selección, adjudicación y seguimiento. No reemplaza el criterio profesional de nadie.</div>
+          </div>
+        </div>
+      </div>
+      <div class="pagenum">18 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 19 — idea ancla 3 + contraste ================= -->
+    <section class="slide dark" data-notes="Tercera repetición de la idea ancla. Mostrar el contraste con cuidado de que quede claro que son dos pliegos distintos, no una mejora del mismo: el de la apertura sacó 2/10, y un pliego evaluado este año con el mismo instrumento en La Pampa sacó 9/10. No es para hacer un ranking: la diferencia es si alguien se sentó a mirar el propio pliego con esta pregunta en la cabeza.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="reticle-wrap" data-ring></div>
+      <div class="kicker reveal r1">Bloque 6 · Cierre</div>
+      <div class="content">
+        <h1 class="quote-title smaller reveal r2">No hace falta que el Estado corra más rápido que la IA. Alcanza con que aprenda a leer antes de que se lo pidan.</h1>
+        <div class="compare-wrap">
+          <div class="compare-label reveal r3">El mismo instrumento de diez preguntas, en dos organismos distintos</div>
+          <div class="compare-row">
+            <div class="compare-item reveal r4">
+              <div class="compare-num dim" data-target="2" data-suffix="/10">0/10</div>
+              <div class="compare-cap dim">el pliego que abrió esta charla</div>
+            </div>
+            <div class="compare-item reveal r5">
+              <div class="compare-num gold" data-target="9" data-suffix="/10">0/10</div>
+              <div class="compare-cap light">un pliego evaluado este año en La Pampa</div>
+            </div>
+          </div>
+        </div>
+        <div class="muted-line reveal r5" style="font-style:italic; margin-top:22px; max-width:820px;">La diferencia no es el tamaño del organismo ni el presupuesto. Es si alguien se sentó a mirar el propio pliego con esta pregunta en la cabeza.</div>
+      </div>
+      <div class="pagenum">19 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 20 — reflexión final ================= -->
+    <section class="slide dark" data-notes="Esa pregunta la pueden hacer ustedes mismos, mañana, sin esperar a nadie. Nosotros ya la venimos haciendo, todavía no tenemos todas las respuestas, y con gusto compartimos lo que fuimos aprendiendo en el camino con cualquiera que quiera empezar.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="reticle-wrap" data-ring></div>
+      <div class="kicker reveal r1">Bloque 6 · Cierre</div>
+      <div class="content" style="justify-content:center; padding-top:0;">
+        <h1 class="big-title reveal r2" style="font-size:56px;">Esa pregunta la pueden hacer ustedes mismos, mañana. Sin esperar a nadie.</h1>
+      </div>
+      <div class="pagenum">20 / 21</div>
+    </section>
+
+    <!-- ================= SLIDE 21 — gracias ================= -->
+    <section class="slide dark" data-notes="Cierre suave, sin mencionar consultoría de forma explícita. Muchas gracias.">
+      <div class="corners"><span class="c-tl"></span><span class="c-br"></span></div>
+      <div class="reticle-wrap" data-ring></div>
+      <div class="kicker reveal r1">Gracias</div>
+      <div class="content" style="padding-top:150px;">
+        <h1 class="big-title reveal r2" style="font-size:88px;">¡Muchas gracias!</h1>
+      </div>
+      <div class="foot-name reveal r4">Juan Martín Atencio &nbsp;·&nbsp; Subsecretario de Innovación Pública, Santa Fe</div>
+      <div class="foot-meta reveal r5">linkedin.com/in/juan-martin-atencio-6878955a</div>
+      <div class="pagenum">21 / 21</div>
+    </section>
+
+  </div>
+</div>
+
+<button id="fsBtn" type="button">⛶ pantalla completa (F)</button>
+<div id="zPrev" class="clickzone" aria-hidden="true"></div>
+<div id="zNext" class="clickzone" aria-hidden="true"></div>
+
+<div id="notesPanel" aria-hidden="true">
+  <div class="n-label">NOTAS DEL ORADOR</div>
+  <div class="n-text" id="notesText"></div>
+</div>
+
+<div id="hint">
+  <div class="hint-box">
+    <div class="hint-title">Controles</div>
+    <div><b>→ / espacio / clicker</b> &nbsp;avanzar &nbsp;&nbsp; <b>←</b> &nbsp;volver</div>
+    <div style="margin-top:8px;"><b>N</b> &nbsp;notas del orador &nbsp;&nbsp; <b>F</b> &nbsp;pantalla completa</div>
+    <div style="margin-top:26px; font-size:15px; color:var(--muted-d);">Tocá cualquier lugar para empezar</div>
+  </div>
+</div>
+
+<template id="reticleSVG">
+  <svg viewBox="0 0 400 400">
+    <circle cx="200" cy="200" r="180" fill="none" stroke="var(--gold)" stroke-opacity="0.16" stroke-width="1.5"/>
+    <circle class="ring-progress" cx="200" cy="200" r="180" fill="none" stroke="var(--gold)" stroke-width="1.5"
+      stroke-linecap="round" stroke-dasharray="1131" stroke-dashoffset="1131"
+      transform="rotate(-90 200 200)" style="transition:stroke-dashoffset .7s cubic-bezier(.22,.61,.36,1);"/>
+    <line x1="200" y1="4" x2="200" y2="26" stroke="var(--gold)" stroke-width="1.5" opacity="0.55"/>
+    <line x1="4" y1="200" x2="26" y2="200" stroke="var(--gold)" stroke-width="1.5" opacity="0.55"/>
+  </svg>
+</template>
+
+<script>
+(function(){
+  "use strict";
+  var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+  var TOTAL = slides.length;
+  var current = 0;
+  // numeración de página automática: nunca hay que tocarla a mano al agregar/quitar slides
+  slides.forEach(function(s, i){
+    var pn = s.querySelector(".pagenum");
+    if (pn) pn.textContent = String(i+1).padStart(2, "0") + " / " + TOTAL;
+  });
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // --- montar el reticle SVG (una vez) en cada slide oscura ---
+  var ringTpl = document.getElementById("reticleSVG");
+  document.querySelectorAll("[data-ring]").forEach(function(wrap){
+    wrap.appendChild(ringTpl.content.cloneNode(true));
+  });
+
+  // --- escalado del stage al viewport, preservando 16:9 ---
+  var stage = document.getElementById("stage");
+  function fit(){
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var scale = Math.min(vw/1600, vh/900);
+    stage.style.transform = "scale(" + scale + ")";
+  }
+  window.addEventListener("resize", fit);
+  fit();
+
+  // --- progreso ---
+  var progressFill = document.getElementById("progressFill");
+  var CIRC = 1131;
+  function updateProgress(){
+    var pct = ((current+1)/TOTAL)*100;
+    progressFill.style.width = pct + "%";
+    var offset = CIRC * (1 - (current+1)/TOTAL);
+    document.querySelectorAll(".ring-progress").forEach(function(c){
+      c.style.strokeDashoffset = offset;
+    });
+  }
+
+  // --- contador de números (stat-value / compare-num) ---
+  function animateNumbers(slide){
+    var els = slide.querySelectorAll("[data-target]");
+    els.forEach(function(el){
+      var target = parseFloat(el.getAttribute("data-target"));
+      var suffix = el.getAttribute("data-suffix") || "";
+      if (reduced){ el.textContent = target + suffix; return; }
+      var dur = 900, start = null;
+      function step(ts){
+        if (!start) start = ts;
+        var p = Math.min((ts-start)/dur, 1);
+        var eased = 1 - Math.pow(1-p, 3);
+        el.textContent = Math.round(target*eased) + suffix;
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = target + suffix;
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
+  // --- typewriter (slide 4) ---
+  var twGen = 0;
+  function runTypewriter(el){
+    var text = el.getAttribute("data-typewriter");
+    if (!text) return;
+    twGen++;
+    var myGen = twGen;
+    el.innerHTML = '<span class="tw-text"></span><span class="tw-cursor">&nbsp;</span>';
+    var textSpan = el.querySelector(".tw-text");
+    if (reduced){ textSpan.textContent = text; return; }
+    var i = 0;
+    function step(){
+      if (myGen !== twGen) return; // se navegó a otra slide: cancelar
+      if (i <= text.length){
+        textSpan.textContent = text.slice(0, i);
+        i++;
+        setTimeout(step, 16 + Math.random()*10);
+      }
+    }
+    setTimeout(step, 350);
+  }
+
+  // --- demo de lectura en vivo (slide "así lee una IA") ---
+  var demoGen = 0;
+  function runDemo(slide){
+    var flags = slide.querySelectorAll(".flag");
+    var annots = slide.querySelectorAll(".annot-item");
+    var summary = slide.querySelector(".demo-summary");
+    if (!flags.length) return;
+    demoGen++;
+    var myGen = demoGen;
+    flags.forEach(function(f){ f.classList.remove("hit"); });
+    annots.forEach(function(a){ a.classList.remove("show"); });
+    if (summary) summary.classList.remove("show");
+    if (reduced){
+      flags.forEach(function(f){ f.classList.add("hit"); });
+      annots.forEach(function(a){ a.classList.add("show"); });
+      if (summary) summary.classList.add("show");
+      return;
+    }
+    var stepDelay = 1450, startDelay = 500;
+    flags.forEach(function(f, i){
+      setTimeout(function(){
+        if (myGen !== demoGen) return;
+        f.classList.add("hit");
+        if (annots[i]) annots[i].classList.add("show");
+      }, startDelay + i*stepDelay);
+    });
+    setTimeout(function(){
+      if (myGen !== demoGen) return;
+      if (summary) summary.classList.add("show");
+    }, startDelay + flags.length*stepDelay + 300);
+  }
+
+  // --- disparar las animaciones propias de cada slide al activarla ---
+  function runSlideAnimations(s){
+    animateNumbers(s);
+    var twEl = s.querySelector("[data-typewriter]");
+    if (twEl) runTypewriter(twEl);
+    if (s.querySelector(".demo-doc")) runDemo(s);
+  }
+
+  // --- notas ---
+  var notesPanel = document.getElementById("notesPanel");
+  var notesText = document.getElementById("notesText");
+  var notesOpen = false;
+  function refreshNotes(){
+    notesText.textContent = slides[current].getAttribute("data-notes") || "";
+  }
+  function toggleNotes(force){
+    notesOpen = (force !== undefined) ? force : !notesOpen;
+    notesPanel.classList.toggle("open", notesOpen);
+    notesPanel.setAttribute("aria-hidden", String(!notesOpen));
+    if (notesOpen) refreshNotes();
+  }
+
+  // --- navegación ---
+  function goTo(idx){
+    if (idx < 0 || idx >= TOTAL || idx === current) return;
+    slides[current].classList.remove("active");
+    current = idx;
+    var s = slides[current];
+    s.classList.add("active");
+    updateProgress();
+    if (notesOpen) refreshNotes();
+    runSlideAnimations(s);
+  }
+  function next(){ goTo(Math.min(current+1, TOTAL-1)); }
+  function prev(){ goTo(Math.max(current-1, 0)); }
+
+  // --- pantalla completa ---
+  function toggleFS(){
+    if (!document.fullscreenElement){ document.documentElement.requestFullscreen().catch(function(){}); }
+    else { document.exitFullscreen().catch(function(){}); }
+  }
+  document.getElementById("fsBtn").addEventListener("click", toggleFS);
+
+  // --- teclado ---
+  window.addEventListener("keydown", function(e){
+    dismissHint();
+    var k = e.key;
+    if (k === "ArrowRight" || k === "ArrowDown" || k === "PageDown" || k === " " || k === "Spacebar"){
+      e.preventDefault(); next();
+    } else if (k === "ArrowLeft" || k === "ArrowUp" || k === "PageUp" || k === "Backspace"){
+      e.preventDefault(); prev();
+    } else if (k === "Home"){ e.preventDefault(); goTo(0); }
+    else if (k === "End"){ e.preventDefault(); goTo(TOTAL-1); }
+    else if (k === "n" || k === "N"){ toggleNotes(); }
+    else if (k === "f" || k === "F"){ toggleFS(); }
+    else if (k === "Escape"){ if (notesOpen) toggleNotes(false); }
+  });
+
+  // --- click zones ---
+  document.getElementById("zNext").addEventListener("click", function(){ dismissHint(); next(); });
+  document.getElementById("zPrev").addEventListener("click", function(){ dismissHint(); prev(); });
+
+  // --- swipe táctil ---
+  var touchX = null;
+  document.addEventListener("touchstart", function(e){ touchX = e.touches[0].clientX; }, {passive:true});
+  document.addEventListener("touchend", function(e){
+    if (touchX === null) return;
+    var dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 60){ dx < 0 ? next() : prev(); }
+    touchX = null;
+  }, {passive:true});
+
+  // --- hint inicial ---
+  var hint = document.getElementById("hint");
+  var hintDismissed = false;
+  function dismissHint(){
+    if (hintDismissed) return;
+    hintDismissed = true;
+    hint.classList.add("hidden");
+  }
+  hint.addEventListener("click", dismissHint);
+  setTimeout(dismissHint, 6000);
+
+  // --- init ---
+  updateProgress();
+  runSlideAnimations(slides[0]);
+})();
+</script>
+
+</body>
+</html>
