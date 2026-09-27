@@ -16,6 +16,8 @@
     --gold-dim:#8A6E3D;
     --text-l:#23252E;
     --box-l:#EDE8DA;
+    --rust:#B0512E;
+    --rust-dim:#8C4327;
     --font-human: Arial, Helvetica, "Liberation Sans", sans-serif;
     --font-system: "Courier New", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
@@ -52,8 +54,18 @@
   .slide.active{
     opacity:1; pointer-events:auto; transform:translateY(0); z-index:2;
   }
-  .slide.dark{ background:var(--ink); color:var(--paper); }
-  .slide.light{ background:var(--lightbg); color:var(--text-l); }
+  .slide.dark{
+    background-color:var(--ink); color:var(--paper);
+    background-image:
+      repeating-linear-gradient(to right, rgba(244,241,234,.05) 0 1px, transparent 1px 56px),
+      repeating-linear-gradient(to bottom, rgba(244,241,234,.05) 0 1px, transparent 1px 56px);
+  }
+  .slide.light{
+    background-color:var(--lightbg); color:var(--text-l);
+    background-image:
+      repeating-linear-gradient(to right, rgba(35,37,46,.055) 0 1px, transparent 1px 56px),
+      repeating-linear-gradient(to bottom, rgba(35,37,46,.055) 0 1px, transparent 1px 56px);
+  }
 
   /* corner marks */
   .corners span{ position:absolute; width:22px; height:22px; opacity:.55; }
@@ -141,6 +153,68 @@
   .tl-num{ font-family:var(--font-system); font-weight:700; font-size:19px; color:var(--goldl); margin-bottom:10px; }
   .tl-label{ font-weight:700; font-size:21px; color:var(--text-l); margin-bottom:10px; }
   .tl-desc{ font-size:17px; color:var(--muted-l); line-height:1.35; }
+
+  /* escalera de progresión (asistente -> agente) */
+  .stairs{ display:flex; align-items:flex-end; gap:26px; margin-top:34px; }
+  .stair-step{ width:266px; display:flex; flex-direction:column; justify-content:flex-end; }
+  .stair-text{ margin-bottom:14px; }
+  .stair-bar{
+    height:var(--riser); border-top:3px solid var(--goldl); border-radius:5px 5px 0 0;
+    background:linear-gradient(180deg, rgba(227,167,63,.32), rgba(227,167,63,.06));
+  }
+  .stair-step.s1{ --riser:18px; }
+  .stair-step.s2{ --riser:56px; }
+  .stair-step.s3{ --riser:94px; }
+  .stair-step.s4{ --riser:132px; }
+
+  /* gauges (autodiagnóstico) */
+  .gauge-row{ display:flex; gap:34px; margin-top:28px; }
+  .gauge{ width:250px; }
+  .gauge-svg{ display:block; width:100%; height:auto; overflow:visible; }
+  .gauge-track{ fill:none; stroke:var(--box-l); stroke-width:16; stroke-linecap:round; }
+  .gauge-arc{
+    fill:none; stroke:var(--goldl); stroke-width:16; stroke-linecap:round;
+    stroke-dasharray:251; stroke-dashoffset:251;
+    transition:stroke-dashoffset 1s cubic-bezier(.22,.61,.36,1);
+  }
+  .gauge-arc.bad{ stroke:var(--rust); }
+  .gauge-wrap{ position:relative; }
+  .gauge-value{
+    position:absolute; left:0; right:0; top:56%; transform:translateY(-50%);
+    text-align:center; font-size:42px; font-weight:700; color:var(--text-l);
+  }
+  .gauge .stat-label{ margin-top:6px; text-align:center; }
+
+  /* fila con caja/candado (lock-in) */
+  .lockrow{ display:flex; gap:50px; align-items:center; margin-top:14px; }
+  .lockrow .blist{ flex:1; margin-top:0; }
+  .lockbox{ width:190px; flex-shrink:0; }
+  .lockbox svg{ width:100%; height:auto; overflow:visible; }
+
+  /* cinta transportadora (ritmo antes/ahora) */
+  .belt{
+    margin-top:22px; height:13px; border-radius:7px;
+    background-image:repeating-linear-gradient(90deg, var(--muted-l) 0 6px, transparent 6px 26px);
+    background-size:26px 100%; opacity:.5; animation:belt-move 2.4s linear infinite;
+  }
+  .belt.fast{
+    opacity:.9; animation-duration:.85s;
+    background-image:repeating-linear-gradient(90deg, var(--goldl) 0 9px, transparent 9px 26px);
+  }
+  @keyframes belt-move{ from{ background-position:0 0; } to{ background-position:-26px 0; } }
+
+  /* viga que conecta dos columnas (puente Timbó / curso) */
+  .bridge-row{ align-items:stretch; }
+  .bridge-beam{ flex:0 0 110px; display:flex; align-items:center; justify-content:center; position:relative; }
+  .bridge-beam::before{
+    content:""; position:absolute; left:0; right:0; top:50%; height:7px; margin-top:-3.5px;
+    background:var(--goldl); border-radius:4px; opacity:.4;
+  }
+  .bridge-beam span{
+    position:relative; background:var(--lightbg); padding:4px 8px;
+    font-family:var(--font-system); font-size:11px; letter-spacing:.5px; color:var(--goldl);
+    text-align:center; line-height:1.35;
+  }
 
   /* caveat box */
   .box{ background:var(--box-l); padding:26px 30px; margin-top:24px; max-width:900px; }
@@ -282,6 +356,8 @@
   }
   @media (prefers-reduced-motion: reduce){
     .cc-buddy-wrap, .cc-buddy, .cc-leg{ animation:none !important; display:none; }
+    .belt{ animation:none !important; }
+    .gauge-arc{ transition:none !important; }
   }
 </style>
 </head>
@@ -418,11 +494,35 @@
       <div class="kicker reveal r1">Autodiagnóstico de pliegos · No es una encuesta</div>
       <div class="content">
         <h1 class="content-title reveal r2">Lo que muestra el autodiagnóstico</h1>
-        <div class="stat-grid">
-          <div class="stat reveal r3"><div class="stat-value" data-target="100" data-suffix="%">0%</div><div class="stat-label">Objeto de la contratación: claro</div></div>
-          <div class="stat reveal r3"><div class="stat-value" data-target="78" data-suffix="%">0%</div><div class="stat-label">de los pliegos, con ambigüedad</div></div>
-          <div class="stat reveal r4"><div class="stat-value" data-target="66" data-suffix="%">0%</div><div class="stat-label">falla en cómo se pondera la oferta</div></div>
-          <div class="stat reveal r4"><div class="stat-value" data-target="62" data-suffix="%">0%</div><div class="stat-label">cumplimiento promedio general</div></div>
+        <div class="gauge-row">
+          <div class="gauge reveal r3">
+            <div class="gauge-wrap">
+              <svg viewBox="0 0 200 106" class="gauge-svg"><path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/><path class="gauge-arc" data-target="100" d="M20,100 A80,80 0 0 1 180,100"/></svg>
+              <div class="gauge-value" data-target="100" data-suffix="%">0%</div>
+            </div>
+            <div class="stat-label">Objeto de la contratación: claro</div>
+          </div>
+          <div class="gauge reveal r3">
+            <div class="gauge-wrap">
+              <svg viewBox="0 0 200 106" class="gauge-svg"><path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/><path class="gauge-arc" data-target="78" d="M20,100 A80,80 0 0 1 180,100"/></svg>
+              <div class="gauge-value" data-target="78" data-suffix="%">0%</div>
+            </div>
+            <div class="stat-label">de los pliegos, con ambigüedad</div>
+          </div>
+          <div class="gauge reveal r4">
+            <div class="gauge-wrap">
+              <svg viewBox="0 0 200 106" class="gauge-svg"><path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/><path class="gauge-arc" data-target="66" d="M20,100 A80,80 0 0 1 180,100"/></svg>
+              <div class="gauge-value" data-target="66" data-suffix="%">0%</div>
+            </div>
+            <div class="stat-label">falla en cómo se pondera la oferta</div>
+          </div>
+          <div class="gauge reveal r4">
+            <div class="gauge-wrap">
+              <svg viewBox="0 0 200 106" class="gauge-svg"><path class="gauge-track" d="M20,100 A80,80 0 0 1 180,100"/><path class="gauge-arc" data-target="62" d="M20,100 A80,80 0 0 1 180,100"/></svg>
+              <div class="gauge-value" data-target="62" data-suffix="%">0%</div>
+            </div>
+            <div class="stat-label">cumplimiento promedio general</div>
+          </div>
         </div>
       </div>
       <div class="pagenum">07 / 21</div>
@@ -434,11 +534,23 @@
       <div class="kicker reveal r1">Bloque 2 · Hacia dónde va esto</div>
       <div class="content">
         <h1 class="content-title reveal r2">Asistente → generativa → copiloto → agente</h1>
-        <div class="timeline">
-          <div class="tl-step reveal r3"><div class="tl-num">01</div><div class="tl-label">Asistente</div><div class="tl-desc">Responde lo que se le pregunta</div></div>
-          <div class="tl-step reveal r3"><div class="tl-num">02</div><div class="tl-label">Generativa</div><div class="tl-desc">Redacta una respuesta, aunque no la sepa</div></div>
-          <div class="tl-step reveal r4"><div class="tl-num">03</div><div class="tl-label">Copiloto</div><div class="tl-desc">Sugiere el siguiente paso</div></div>
-          <div class="tl-step reveal r4"><div class="tl-num">04</div><div class="tl-label">Agente</div><div class="tl-desc">Recibe un objetivo y arma sola la secuencia</div></div>
+        <div class="stairs">
+          <div class="stair-step s1 reveal r3">
+            <div class="stair-text"><div class="tl-num">01</div><div class="tl-label">Asistente</div><div class="tl-desc">Responde lo que se le pregunta</div></div>
+            <div class="stair-bar"></div>
+          </div>
+          <div class="stair-step s2 reveal r3">
+            <div class="stair-text"><div class="tl-num">02</div><div class="tl-label">Generativa</div><div class="tl-desc">Redacta una respuesta, aunque no la sepa</div></div>
+            <div class="stair-bar"></div>
+          </div>
+          <div class="stair-step s3 reveal r4">
+            <div class="stair-text"><div class="tl-num">03</div><div class="tl-label">Copiloto</div><div class="tl-desc">Sugiere el siguiente paso</div></div>
+            <div class="stair-bar"></div>
+          </div>
+          <div class="stair-step s4 reveal r4">
+            <div class="stair-text"><div class="tl-num">04</div><div class="tl-label">Agente</div><div class="tl-desc">Recibe un objetivo y arma sola la secuencia</div></div>
+            <div class="stair-bar"></div>
+          </div>
         </div>
         <div class="muted-line reveal r5" style="font-style:italic; margin-top:30px; font-size:19px; max-width:900px;">Ya existen: SOURCe (Banco Mundial) y la Ontología de Contratación Electrónica (UE). En Argentina, hoy, sin evidencia significativa de proveedores-agente en licitaciones. Pero la tecnología va en esa dirección.</div>
       </div>
@@ -466,10 +578,12 @@
           <div class="col reveal r3">
             <div class="col-kicker">Antes</div>
             <div class="col-body">Firma digital, gestión documental: se licitaba un sistema y se esperaban los tiempos de implementación. Mientras tanto, el resto del mundo esperaba casi al mismo ritmo.</div>
+            <div class="belt"></div>
           </div>
           <div class="col reveal r4">
             <div class="col-kicker">Ahora · IA generativa</div>
             <div class="col-body">Una suscripción mensual. Sin pliego. Sin presupuesto plurianual. Sin esperar un desarrollo a medida.</div>
+            <div class="belt fast"></div>
           </div>
         </div>
       </div>
@@ -482,11 +596,24 @@
       <div class="kicker reveal r1">Bloque 3 · Antes de comprar la solución</div>
       <div class="content">
         <h1 class="content-title reveal r2">El riesgo no es el producto. Es el día que lo querés dejar.</h1>
-        <ul class="blist">
-          <li class="reveal r3">Arquitectura cerrada: el motor que interpreta y decide casi nunca queda tan abierto como el resto del sistema</li>
-          <li class="reveal r4">Se terceriza el criterio: no solo la herramienta, también el equipo que la entrena y la opera</li>
-          <li class="reveal r5">¿Hay una cláusula de salida ordenada, o hay que empezar de cero?</li>
-        </ul>
+        <div class="lockrow">
+          <ul class="blist">
+            <li class="reveal r3">Arquitectura cerrada: el motor que interpreta y decide casi nunca queda tan abierto como el resto del sistema</li>
+            <li class="reveal r4">Se terceriza el criterio: no solo la herramienta, también el equipo que la entrena y la opera</li>
+            <li class="reveal r5">¿Hay una cláusula de salida ordenada, o hay que empezar de cero?</li>
+          </ul>
+          <div class="lockbox reveal r5">
+            <svg viewBox="0 0 200 200">
+              <polygon points="100,18 172,55 100,92 28,55" fill="none" stroke="var(--goldl)" stroke-width="2" opacity=".55"/>
+              <polygon points="28,55 100,92 100,172 28,135" fill="var(--box-l)" stroke="var(--goldl)" stroke-width="2" opacity=".55"/>
+              <polygon points="172,55 100,92 100,172 172,135" fill="var(--box-l)" stroke="var(--goldl)" stroke-width="2" opacity=".85"/>
+              <path d="M78,92 v-16 a22,22 0 0 1 44,0 v16" fill="none" stroke="var(--text-l)" stroke-width="6" stroke-linecap="round"/>
+              <rect x="72" y="90" width="56" height="42" rx="6" fill="var(--goldl)"/>
+              <circle cx="100" cy="108" r="6" fill="var(--ink)"/>
+              <rect x="97" y="112" width="6" height="12" fill="var(--ink)"/>
+            </svg>
+          </div>
+        </div>
       </div>
       <div class="pagenum">11 / 21</div>
     </section>
@@ -586,11 +713,12 @@
       <div class="kicker reveal r1">Bloque 5</div>
       <div class="content">
         <h1 class="content-title reveal r2">El sistema, y la capacitación</h1>
-        <div class="two-col">
+        <div class="two-col bridge-row">
           <div class="col reveal r3">
             <div class="col-kicker">Timbó Compras</div>
             <div class="col-body">Hoy, todavía sin IA incorporada. Pero con el proceso estructurado (etapas, datos ordenados, trazabilidad) que es la condición previa para incorporarla rápido, cuando haga falta.</div>
           </div>
+          <div class="bridge-beam reveal r4"><span>Estructura para gobernar el proceso</span></div>
           <div class="col reveal r4">
             <div class="col-kicker">Curso · Puente al Futuro</div>
             <div class="col-body">Tres módulos: fundamentos y prompting · planificación asistida del proceso · selección, adjudicación y seguimiento. No reemplaza el criterio profesional de nadie.</div>
@@ -743,9 +871,9 @@
     });
   }
 
-  // --- contador de números (stat-value / compare-num) ---
+  // --- contador de números (stat-value / compare-num / gauge-value) ---
   function animateNumbers(slide){
-    var els = slide.querySelectorAll("[data-target]");
+    var els = slide.querySelectorAll(".stat-value[data-target], .compare-num[data-target], .gauge-value[data-target]");
     els.forEach(function(el){
       var target = parseFloat(el.getAttribute("data-target"));
       var suffix = el.getAttribute("data-suffix") || "";
@@ -760,6 +888,24 @@
         else el.textContent = target + suffix;
       }
       requestAnimationFrame(step);
+    });
+  }
+
+  // --- gauges circulares (autodiagnóstico): dibuja el arco según data-target ---
+  var GAUGE_LEN = 251;
+  function animateGauges(slide){
+    var arcs = slide.querySelectorAll(".gauge-arc[data-target]");
+    arcs.forEach(function(arc){
+      var target = parseFloat(arc.getAttribute("data-target"));
+      arc.classList.toggle("bad", target < 90);
+      arc.style.transition = "none";
+      arc.style.strokeDashoffset = GAUGE_LEN;
+      void arc.offsetWidth;
+      arc.style.transition = "";
+      var offset = GAUGE_LEN * (1 - target/100);
+      requestAnimationFrame(function(){
+        arc.style.strokeDashoffset = reduced ? offset : offset;
+      });
     });
   }
 
@@ -846,6 +992,7 @@
   // --- disparar las animaciones propias de cada slide al activarla ---
   function runSlideAnimations(s){
     animateNumbers(s);
+    animateGauges(s);
     var twEl = s.querySelector("[data-typewriter]");
     if (twEl) runTypewriter(twEl);
     if (s.querySelector(".demo-doc")) runDemo(s);
